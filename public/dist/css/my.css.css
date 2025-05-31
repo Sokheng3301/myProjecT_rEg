@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'Akbaltom Nagar';
+    src: url('/fonts/AKbalthom-Naga.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+    font-weight: normal;
+}
+
+* {
+    font-family: 'Lato', 'Helvetica Neue', 'Akbaltom Nagar', sans-serif !important;
+    /* font-family: 'Lato', 'Helvetica Neue', 'Siemreap', sans-serif !important; */
+}
+/* input {
+    autocomplete: off !important;
+} */
+nav ul li a,
+nav ul li p{
+    font-size: 98% !important;
+}
+.file-upload{
+    border: 2px dashed #a2a2a2;
+    width: 100%;
+    border-radius: 6px;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+    cursor: pointer;
+    height: auto;
+    background-color: #ecececcc;
+    padding: 15px;
+}
+.file-upload img{
+    margin: auto;
+}

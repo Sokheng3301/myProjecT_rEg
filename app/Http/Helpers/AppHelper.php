@@ -1,0 +1,42 @@
+<?php
+namespace App\Http\Helpers;
+
+class AppHelper
+{
+    // Existing constants and methods...
+    const LEVEL_BACHELOR = 1;
+    const LEVEL_ASSOCIATE = 2;
+    const LEVEL_VOCATION = 3;
+    
+    const LEVEL = [
+        self::LEVEL_BACHELOR => 'bacheclor',
+        self::LEVEL_ASSOCIATE => 'associate',
+        self::LEVEL_VOCATION => 'vocational',
+    ];
+
+    public static function getStudyLevel()
+    {
+        return array_map(function($key) {
+            return __('lang.' . $key);
+        }, self::LEVEL);
+    }
+
+
+    const YEAR_LEVEL_1 = 1;
+    const YEAR_LEVEL_2 = 2;
+    const YEAR_LEVEL_3 = 3;
+    const YEAR_LEVEL_4 = 4;
+
+    const YEAR_LEVEL = [
+        self::YEAR_LEVEL_1 => '1Year',
+        self::YEAR_LEVEL_2 => '2Year',
+        self::YEAR_LEVEL_3 => '3Year',
+        self::YEAR_LEVEL_4 => '4Year',
+    ];
+
+    public static function getYearLevel(){
+        return array_map(function($key) {
+            return __('lang.' . $key);
+        }, self::YEAR_LEVEL);
+    }
+}
