@@ -28,7 +28,7 @@ return[
 
     'semester' => 'Semester',
     'semesterManagement' => 'Semester Management',
-    'semesterList' => 'Semester List',  
+    'semesterList' => 'Semester List',
     'semesterCreate' => 'Create Semester',
     'semesterEdit' => 'Edit Semester',
     'semesterDelete' => 'Delete Semester',
@@ -59,7 +59,7 @@ return[
     'studentDropOut' => 'Student Drop Out',
 
     'ScheduleManagement' => 'Schedule Management',
-    'scheduleList' => 'Schedule List',  
+    'scheduleList' => 'Schedule List',
     'scheduleCreate' => 'Create Schedule',
     'scheduleEdit' => 'Edit Schedule',
     'scheduleDelete' => 'Delete Schedule',
@@ -75,7 +75,7 @@ return[
     'scheduleSearchResultNotFound' => 'Schedule Not Found',
 
     'currentSchedule' => 'Current Schedule',
-    'currentScheduleList' => 'Current Schedule List',   
+    'currentScheduleList' => 'Current Schedule List',
     'draftSchedule' => 'Draft Schedule',
     'draftScheduleList' => 'Draft Schedule List',
 
@@ -124,9 +124,9 @@ return[
     'requestSearch' => 'Search Request',
     'requestDestroy' => 'Destroy Request',
     'requestSearchResult' => 'Search Result',
-    'requestSearchResultEmpty' => 'No Request Found',   
+    'requestSearchResultEmpty' => 'No Request Found',
     'acceptedRequest' => 'Accepted Request',
-    'rejectedRequest' => 'Rejected Request',    
+    'rejectedRequest' => 'Rejected Request',
     'doneRequest' => 'Done Request',
 
     'systemOperating' => 'System Operatings',
@@ -242,6 +242,7 @@ return[
     'detail' => 'About class',
     'close' => 'Close',
     'na' => 'N/A',
+    'idCard' => 'ID Card',
 
 
 ];

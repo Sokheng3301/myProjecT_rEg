@@ -1,6 +1,6 @@
 @extends('backend.layout.master')
 @section('title')
-    {{__('lang.aboutTeacher')}}
+    {{__('lang.aboutStudent')}}
 @endsection
 @section('content')
 
@@ -19,7 +19,7 @@
     </div> --}}
 
     @section('pageTitle')
-        {{__('lang.aboutTeacher')}}
+        {{__('lang.aboutStudent')}}
     @endsection
 
     <div class="app-content">
@@ -32,17 +32,10 @@
                 <!-- /.card -->
                 <!-- DIRECT CHAT -->
                     <div class="card mb-4">
-                        <form class="ui form" method="POST" action="
-                                @if ($update)
-                                    {{ route('teacher.update', $teacher->id) }}
-                                @else
-                                    {{ route('teacher.store') }}
-                                @endif" enctype="multipart/form-data"  autocomplete="off">
-                            @csrf
-                            @method($update ? 'PUT' : 'POST')
+
 
                             <div class="card-header">
-                                <h3 class="card-title">{{__('lang.teacherProfile')}} </h3>
+                                <h3 class="card-title">{{__('lang.studentProfile')}} </h3>
                             </div>
                             <div class="card-body">
                                 <!-- Conversations are loaded here -->
@@ -51,28 +44,27 @@
                                         <div class="row">
                                             <div class="col-md-6 mx-auto">
                                                 {{-- <label for="teacher_profile" class="file-upload"> --}}
-                                                    <img class="ui small image mx-auto" @if ($teacher->profile)
-                                                        src="{{ asset($teacher->profile) }}"
+                                                    <img class="ui small image mx-auto" @if ($student->profile)
+                                                        src="{{ asset($student->profile) }}"
                                                         @else
                                                         src="{{ asset('dist/assets/img/white-image.png') }}"
                                                         @endif alt="" id="dep_logo_img">
                                                     <p class="text-center mt-2">{{__("lang.teacherPhoto")}}</p>
                                                     <div class="col-md-10 mx-auto">
-                                                        {{-- <div class="header">{{__("lang.remark")}}</div> --}}
-                                                        @if($block_info->block_status == 0 || $teacher->leave_status == 0)
+                                                        {{-- @if($block_info->block_status == 0 || $student->leave_status == 0)
                                                             <div class="ui red message">
                                                                 @if($block_info->block_status == 0)
                                                                     <p class="fw-bold">{{__("lang.teacherHasBlocked")}}</p>
                                                                     <p class="ps-3"> <i class="bi bi-calendar"></i> {{ \Carbon\Carbon::parse($block_info->blocked_date)->format('d-m-Y') }}</p>
                                                                     <p class="ps-3"> <i class="bi bi-person"></i> {{ $block_info->blocked_by }}</p>
                                                                 @endif
-                                                                @if($teacher->leave_status == 0)
+                                                                @if($student->leave_status == 0)
                                                                     <p class="fw-bold">{{__("lang.teacherHasLeaved")}}</p>
-                                                                    <p class="ps-3"> <i class="bi bi-calendar"></i> {{ \Carbon\Carbon::parse($teacher->leave_date)->format('d-m-Y') }}</p>
-                                                                    <p class="ps-3"> <i class="bi bi-chat-right-dots"></i> {{ $teacher->leave_description }}</p>
+                                                                    <p class="ps-3"> <i class="bi bi-calendar"></i> {{ \Carbon\Carbon::parse($student->leave_date)->format('d-m-Y') }}</p>
+                                                                    <p class="ps-3"> <i class="bi bi-chat-right-dots"></i> {{ $student->leave_description }}</p>
                                                                 @endif
                                                             </div>
-                                                        @endif
+                                                        @endif --}}
 
 
                                                     </div>
@@ -95,27 +87,27 @@
                                             <div class="col-md-4">
                                                 <div class="row">
                                                     <div class="col-5 fw-bold">{{ __('lang.idCard') }}</div>
-                                                    <p class="col-7">{{ $teacher->id_card ?: __('lang.null') }}</p>
+                                                    <p class="col-7">{{ $student->id_card ?: __('lang.null') }}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.fullnameKh') }}</div>
-                                                    <p class="col-7">{{ $teacher->fullname_kh }}</p>
+                                                    <p class="col-7">{{ $student->fullname_kh }}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.fullnameEn') }}</div>
-                                                    <p class="col-7 text-uppercase">{{ $teacher->fullname_en }}</p>
+                                                    <p class="col-7 text-uppercase">{{ $student->fullname_en }}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.gender') }}</div>
-                                                    <p class="col-7">{{ $teacher->gender == 'm' ? __('lang.male') : __('lang.female') }}</p>
+                                                    <p class="col-7">{{ $student->gender == 'm' ? __('lang.male') : __('lang.female') }}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.birthDate') }}</div>
-                                                    <p class="col-7">{{ $teacher->birth_date ? \Illuminate\Support\Carbon::parse($teacher->birth_date)->format('d-m-Y') : __("lang.null") }}</p>
+                                                    <p class="col-7">{{ $student->birth_date ? \Illuminate\Support\Carbon::parse($student->birth_date)->format('d-m-Y') : __("lang.null") }}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.department') }}</div>
                                                     <p class="col-7">
                                                         @if (session()->has('localization') && session('localization') == 'en')
-                                                            {{ $teacher->department->dep_name_en }}
+                                                            {{ $student->class->majors->departments->dep_name_en }}
                                                         @else
-                                                            {{ $teacher->department->dep_name_kh }}
+                                                            {{ $student->class->majors->departments->dep_name_kh }}
                                                         @endif
                                                     </p>
                                                     <div class="col-5 fw-bold">{{ __('lang.phone_number') }}</div>
-                                                    <p class="col-7">{{ $teacher->phone_number ?: __("lang.null")}}</p>
+                                                    <p class="col-7">{{ $student->phone_number ?: __("lang.null")}}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.email_add') }}</div>
-                                                    <p class="col-7">{{ $teacher->email_add ?: __("lang.null")}}</p>
+                                                    <p class="col-7">{{ $student->email_add ?: __("lang.null")}}</p>
                                                 </div>
 
 
@@ -124,38 +116,38 @@
                                             <div class="col-md-4">
                                                 <div class="row">
                                                     <div class="col-5 fw-bold">{{ __('lang.nationality') }}</div>
-                                                    <p class="col-7">{{ $teacher->nationality ?: __('lang.null') }}</p>
+                                                    <p class="col-7">{{ $student->nationality ?: __('lang.null') }}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.disability') }}</div>
-                                                    <p class="col-7">{{ $teacher->disability ?: __("lang.null") }}</p>
+                                                    <p class="col-7">{{ $student->disability ?: __("lang.null") }}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.idNumber') }}</div>
-                                                    <p class="col-7">{{ $teacher->id_number ?: __("lang.null") }}</p>
+                                                    <p class="col-7">{{ $student->id_number ?: __("lang.null") }}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.position') }}</div>
-                                                    <p class="col-7">{{ $teacher->position ?: __("lang.null") }}</p>
+                                                    <p class="col-7">{{ $student->position ?: __("lang.null") }}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.office') }}</div>
-                                                    <p class="col-7">{{ $teacher->office  ?: __("lang.null") }}</p>
+                                                    <p class="col-7">{{ $student->office  ?: __("lang.null") }}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.placeBirth') }}</div>
-                                                    <p class="col-7"> {{ $teacher->place_of_birth ?: __('lang.null')}}</p>
+                                                    <p class="col-7"> {{ $student->place_of_birth ?: __('lang.null')}}</p>
                                                     <div class="col-5 fw-bold">{{ __('lang.current_add') }}</div>
-                                                    <p class="col-7"> {{ $teacher->current_add ?: __('lang.null')}}</p>
+                                                    <p class="col-7"> {{ $student->current_add ?: __('lang.null')}}</p>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-4">
                                                 <div class="row">
                                                     <div class="col-6 fw-bold">{{ __('lang.payrollAcc') }}</div>
-                                                    <p class="col-6">{{ $teacher->payroll_acc ?: __('lang.null') }}</p>
+                                                    <p class="col-6">{{ $student->payroll_acc ?: __('lang.null') }}</p>
                                                     <div class="col-6 fw-bold">{{ __('lang.memberBcc') }}</div>
-                                                    <p class="col-6">{{ $teacher->memeber_bcc ?: __("lang.null") }}</p>
+                                                    <p class="col-6">{{ $student->memeber_bcc ?: __("lang.null") }}</p>
                                                     <div class="col-6 fw-bold">{{ __('lang.employment_date') }}</div>
-                                                    <p class="col-6">{{ $teacher->employment_date ? \Illuminate\Support\Carbon::parse($teacher->employment_date)->format('d-m-Y') : __("lang.null") }}</p>
+                                                    <p class="col-6">{{ $student->employment_date ? \Illuminate\Support\Carbon::parse($student->employment_date)->format('d-m-Y') : __("lang.null") }}</p>
                                                     <div class="col-6 fw-bold">{{ __('lang.soup_date') }}</div>
-                                                    <p class="col-6">{{ $teacher->soup_date ? \Illuminate\Support\Carbon::parse($teacher->soup_date)->format('d-m-Y') : __("lang.null") }}</p>
+                                                    <p class="col-6">{{ $student->soup_date ? \Illuminate\Support\Carbon::parse($student->soup_date)->format('d-m-Y') : __("lang.null") }}</p>
                                                     <div class="col-6 fw-bold">{{ __('lang.anountment') }}</div>
-                                                    <p class="col-6">{{ $teacher->anountment  ?: __("lang.null") }}</p>
+                                                    <p class="col-6">{{ $student->anountment  ?: __("lang.null") }}</p>
                                                     <div class="col-6 fw-bold">{{ __('lang.working_unit') }}</div>
-                                                    <p class="col-6"> {{ $teacher->working_unit ?: __('lang.null')}}</p>
+                                                    <p class="col-6"> {{ $student->working_unit ?: __('lang.null')}}</p>
                                                     <div class="col-6 fw-bold">{{ __('lang.working_unit_add') }}</div>
-                                                    <p class="col-6"> {{ $teacher->working_unit_add ?: __('lang.null')}}</p>
+                                                    <p class="col-6"> {{ $student->working_unit_add ?: __('lang.null')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -175,7 +167,7 @@
                                         <h3 class="pb-2 ui red header border-bottom">2. {{__("lang.teacherProfessional")}} </h3>
                                     </div>
 
-                                    <div class="col-md-12 table-responsive">
+                                    {{-- <div class="col-md-12 table-responsive">
                                         <table class="table table-sm" id="teacherProfessionalTable">
                                             <thead>
                                                 <tr>
@@ -186,7 +178,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($teacher_professionals as $tprofess)
+                                                @foreach ($student_professionals as $tprofess)
                                                     <tr>
                                                         <td class="field"> {{ $tprofess->type_professional ?: __('lang.null') }} </td>
                                                         <td class="field">{{ $tprofess->description ?: __('lang.null') }}</td>
@@ -196,336 +188,11 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="row">
-                                            <div class="col-5 fw-bold">{{ __('lang.rankAndClass') }}</div>
-                                            <p class="col-7">{{ $teacher->rank ?: __('lang.null') }}</p>
-                                            <div class="col-5 fw-bold">{{ __('lang.refer') }}</div>
-                                            <p class="col-7">{{ $teacher->refer ?: __("lang.null") }}</p>
-                                            <div class="col-5 fw-bold">{{ __('lang.numbering') }}</div>
-                                            <p class="col-7">{{ $teacher->numbering ?: __("lang.null") }}</p>
-
-                                            {{-- <p class="col-7">{{ \Illuminate\Support\Carbon::parse($teacher->employment_date)->format('d-m-Y') ?: __("lang.null") }}</p> --}}
-                                            <div class="col-5 fw-bold">{{ __('lang.dateLastIncreSalary') }}</div>
-                                            <p class="col-7">{{ $teacher->last_interest_date ? \Illuminate\Support\Carbon::parse($teacher->last_interest_date)->format('d-m-Y') : __("lang.null") }}</p>
-                                            <div class="col-5 fw-bold">{{ __('lang.dated') }}</div>
-                                            <p class="col-7">{{ $teacher->dated ? \Illuminate\Support\Carbon::parse($teacher->dated)->format('d-m-Y') : __("lang.null") }}</p>
-                                            <div class="col-5 fw-bold">{{ __('lang.teachInYear') }}</div>
-                                            <p class="col-7"> {{ $teacher->teach_in_year ?: __('lang.null')}}</p>
-                                            <div class="col-5 fw-bold">{{ __('lang.englishTeach') }}</div>
-                                            <p class="col-7"> {{ $teacher->english_teach ?: __('lang.null')}}</p>
-                                            <div class="col-5 fw-bold">{{ __('lang.threeCombine') }}</div>
-                                            <p class="col-7">{{ $teacher->three_level_combine ?: __('lang.null') }}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="row">
-
-                                            <div class="col-5 fw-bold">{{ __('lang.technicTeamLeader') }}</div>
-                                            <p class="col-7">{{ $teacher->technic_team_leader ?: __("lang.null") }}</p>
-                                            <div class="col-5 fw-bold">{{ __('lang.help_teach') }}</div>
-                                            <p class="col-7">{{ $teacher->help_teach ?: __("lang.null") }}</p>
-
-                                            {{-- <p class="col-7">{{ \Illuminate\Support\Carbon::parse($teacher->employment_date)->format('d-m-Y') ?: __("lang.null") }}</p> --}}
-                                            <div class="col-5 fw-bold">{{ __('lang.two_class') }}</div>
-                                            <p class="col-7">{{ $teacher->two_class ?: __("lang.null") }}</p>
-                                            <div class="col-5 fw-bold">{{ __('lang.class_charge') }}</div>
-                                            <p class="col-7">{{ $teacher->class_charge ?: __("lang.null") }}</p>
-
-                                            {{-- <p class="col-7">{{ \Illuminate\Support\Carbon::parse($teacher->last_interest_date)->format('d-m-Y') ?: __("lang.null") }}</p> --}}
-                                            <div class="col-5 fw-bold">{{ __('lang.cross_school') }}</div>
-                                            <p class="col-7">{{ $teacher->cross_school ?: __("lang.null") }}</p>
-
-                                            <div class="col-5 fw-bold">{{ __('lang.overtime') }}</div>
-                                            <p class="col-7"> {{ $teacher->overtime ?: __('lang.null')}}</p>
-
-                                            <div class="col-5 fw-bold">{{ __('lang.coupling_class') }}</div>
-                                            <p class="col-7"> {{ $teacher->coupling_class ?: __('lang.null')}}</p>
-
-                                             <div class="col-5 fw-bold">{{ __('lang.two_lang') }}</div>
-                                            <p class="col-7"> {{ $teacher->two_lang ?: __('lang.null')}}</p>
-                                        </div>
-                                    </div>
-
-
-
-
-                                {{-- section 3 --}}
-                                    <div class="col-md-12 my-3 mt-4">
-                                        <h3 class="pb-2 ui red header border-bottom">3. {{__("lang.workHistory")}}</h3>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="row">
-                                            <div class="col-5 fw-bold">{{ __('lang.work_status') }}</div>
-                                            <p class="col-7">{{ $teacher->work_status ?: __('lang.null') }}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12 mt-3 table-responsive">
-                                        <table class="table table-sm" id="teacherWorkHistoryTable">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col"> {{ __("lang.workContinue") }} </th>
-                                                    <th scope="col"> {{ __("lang.currentWorkingUnit") }} </th>
-                                                    <th scope="col"> {{ __("lang.startDate") }} </th>
-                                                    <th scope="col"> {{ __("lang.finishDate") }}  </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($teacher_workhistories as $tworkhistory)
-                                                    <tr>
-                                                        <td class="field">{{$tworkhistory->work_continue ?: __('lang.null')}}</td>
-                                                        <td class="field">{{$tworkhistory->current_working ?: __('lang.null')}}</td>
-                                                        <td class="field">{{$tworkhistory->start_date ? \Illuminate\Support\Carbon::parse($tworkhistory->start_date)->format('d-m-Y') : __('lang.null')}}</td>
-                                                        <td class="field">{{$tworkhistory->finish_date ? \Illuminate\Support\Carbon::parse($tworkhistory->finish_date)->format('d-m-Y') : __('lang.null')}}</td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-
-
-
-                                {{-- section 4 --}}
-                                    <div class="col-md-12 my-3">
-                                        <h3 class="pb-2 ui red header border-bottom">4. {{__("lang.praiseBlame")}}</h3>
-                                    </div>
-
-                                    <div class="col-md-12  table-responsive">
-                                        <table class="table table-sm" id="teacherPraiseBlameTable">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col"> {{ __("lang.typePraiseBlame") }} </th>
-                                                    <th scope="col"> {{ __("lang.providedBy") }} </th>
-                                                    <th scope="col"> {{ __("lang.recieveDate") }} </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($teacher_praiseblames as $tpraiseblame)
-                                                    <tr>
-                                                        <td class="field"> {{ $tpraiseblame->type_praiseblame ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tpraiseblame->provided_by ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tpraiseblame->recieve_date ? \Illuminate\Support\Carbon::parse($tpraiseblame->recieve_date)->format('d-m-Y') : __('lang.null') }} </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-
-                                {{-- section 5 --}}
-                                    <div class="col-md-12 my-3">
-                                        <h3 class="pb-2 ui red header border-bottom">5. {{__("lang.culturalLevel")}}</h3>
-                                    </div>
-
-                                    <div class="col-md-12  table-responsive">
-                                        <table class="table table-sm" id="teacherculturalLevelTable">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col"> {{ __("lang.culturalLevel") }} </th>
-                                                    <th scope="col"> {{ __("lang.majorName") }} </th>
-                                                    <th scope="col"> {{ __("lang.recieveDate") }} </th>
-                                                    <th scope="col"> {{ __("lang.country") }} </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($teacher_culturallevels as $tcultural)
-                                                    <tr>
-                                                        <td class="field"> {{ $tcultural->cultural_level ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tcultural->major_name ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tcultural->recieve_date ? \Illuminate\Support\Carbon::parse($tcultural->recieve_date)->format('d-m-Y') : __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tcultural->country ?: __('lang.null') }} </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-
-                                {{-- section 6 --}}
-                                    <div class="col-md-12 my-3">
-                                        <h3 class="pb-2 ui red header border-bottom">6. {{__("lang.pedagogyCourse")}}</h3>
-                                    </div>
-
-                                    <div class="col-md-12  table-responsive">
-                                        <table class="table table-sm" id="teacherpedagogyCourseTable">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col"> {{ __("lang.ProfessionalLevel") }} </th>
-                                                    <th scope="col"> {{ __("lang.Specialty1") }} </th>
-                                                    <th scope="col"> {{ __("lang.Specialty2") }} </th>
-                                                    <th scope="col"> {{ __("lang.TrainingSystem") }} </th>
-                                                    <th scope="col"> {{ __("lang.recieveDate") }} </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                               @foreach ($teacher_pedagogyCourses as $tpedagogycourse)
-                                                    <tr>
-                                                        <td class="field"> {{ $tpedagogycourse->professional_level ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tpedagogycourse->specialty_first ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tpedagogycourse->specialty_second ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tpedagogycourse->training_system ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tpedagogycourse->recieve_date ? \Illuminate\Support\Carbon::parse($tpedagogycourse->recieve_date)->format('d-m-Y') : __('lang.null') }} </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-
-                                {{-- section 7 --}}
-                                    <div class="col-md-12 my-3">
-                                        <h3 class="pb-2 ui red header border-bottom">7. {{__("lang.shortCourse")}}</h3>
-                                    </div>
-
-                                    <div class="col-md-12  table-responsive">
-                                        <table class="table table-sm" id="teacherShortCourseTable">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col"> {{ __("lang.section") }} </th>
-                                                    <th scope="col"> {{ __("lang.majorName") }} </th>
-                                                    <th scope="col"> {{ __("lang.startDate") }} </th>
-                                                    <th scope="col"> {{ __("lang.finishDate") }} </th>
-                                                    <th scope="col"> {{ __("lang.duration") }} </th>
-                                                    <th scope="col"> {{ __("lang.prepareBy") }} </th>
-                                                    <th scope="col"> {{ __("lang.supportBy") }} </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($teacher_shortcourses as $tshortcourse)
-                                                    <tr>
-                                                        <td class="field"> {{ $tshortcourse->section ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tshortcourse->major_name ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tshortcourse->start_date ? \Illuminate\Support\Carbon::parse($tshortcourse->start_date)->format('d-m-Y')  : __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tshortcourse->finish_date ? \Illuminate\Support\Carbon::parse($tshortcourse->finish_date)->format('d-m-Y')  : __('lang.null') }} </td>
-
-                                                        <td class="field"> {{ $tshortcourse->duration ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tshortcourse->prepare_by ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tshortcourse->support_by ?: __('lang.null') }} </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-
-                                {{-- section 8 --}}
-                                    <div class="col-md-12 my-3">
-                                        <h3 class="pb-2 ui red header border-bottom">8. {{__("lang.Foreignlanguage")}}</h3>
-                                    </div>
-
-                                    <div class="col-md-12  table-responsive">
-                                        <table class="table table-sm" id="teacherForeignlanguageTable">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col"> {{ __("lang.language") }} </th>
-                                                    <th scope="col"> {{ __("lang.reading") }} </th>
-                                                    <th scope="col"> {{ __("lang.writing") }} </th>
-                                                    <th scope="col"> {{ __("lang.conversation") }} </th>
-
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($teacher_foriegnlangs as $tforiegnlang)
-                                                    <tr>
-                                                        <td class="field"> {{ $tforiegnlang->language ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tforiegnlang->reading ?: __('lang.null') }} </td>
-
-                                                        <td class="field"> {{ $tforiegnlang->writing ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tforiegnlang->conversation ?: __('lang.null') }} </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-
-                                 {{-- section 9 --}}
-                                    <div class="col-md-12 my-3">
-                                        <h3 class="pb-2 ui red header border-bottom">9. {{__("lang.familyStatus")}}</h3>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-5 fw-bold">{{ __('lang.familyStatus') }}</div>
-                                                <p class="col-7">{{ $teacher->family_status ?: __('lang.null') }}</p>
-                                                <div class="col-5 fw-bold">{{ __('lang.mustBe') }}</div>
-                                                <p class="col-7">{{ $teacher->must_be ?: __('lang.null') }}</p>
-                                                <div class="col-5 fw-bold">{{ __('lang.occupation') }}</div>
-                                                <p class="col-7">{{ $teacher->must_be ?: __('lang.occupation') }}</p>
-                                                <div class="col-5 fw-bold">{{ __('lang.name_confederate') }}</div>
-                                                <p class="col-7">{{ $teacher->name_confederate ?: __('lang.null') }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="row">
-
-                                                <div class="col-5 fw-bold">{{ __('lang.confederation') }}</div>
-                                                <p class="col-7">{{ $teacher->confederation ?: __('lang.null') }}</p>
-
-                                                <div class="col-5 fw-bold">{{ __('lang.birth_date_spouse') }}</div>
-                                                <p class="col-7">{{ $teacher->birth_date_spouse  ? \Illuminate\Support\Carbon::parse($teacher->birth_date_spouse)->format('d-m-Y') : __('lang.null') }}</p>
-                                                <div class="col-5 fw-bold">{{ __('lang.wife_salary') }}</div>
-                                                <p class="col-7">{{ $teacher->wife_salary ?: __('lang.null') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-md-12 mt-4 table-responsive">
-                                        <table class="table table-sm" id="teacherChildrenTable">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col"> {{ __("lang.childName") }} </th>
-                                                    <th scope="col"> {{ __("lang.gender") }} </th>
-                                                    <th scope="col"> {{ __("lang.birthDate") }} </th>
-                                                    <th scope="col"> {{ __("lang.occupation") }} </th>
-
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($teacher_childrens as $tchild)
-                                                    <tr>
-                                                        <td class="field"> {{ $tchild->child_name ?: __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tchild->gender ?: __('lang.null') }} </td>
-
-                                                        <td class="field"> {{ $tchild->birth_date ? \Illuminate\Support\Carbon::parse($tchild->birth_date)->format('d-m-Y') : __('lang.null') }} </td>
-                                                        <td class="field"> {{ $tchild->occupation ?: __('lang.null') }} </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-                                    {{-- <div class="col-md-12 d-none">
-                                        <div class="two fields">
-                                            <div class="field"><input type="hidden" class="d-none" name="trTableProfessional" id="teacherProfessionalTableCountTr" value=""></div>
-                                            <div class="field"><input type="hidden" class="d-none" name="trTableWorkHistory" id="teacherWorkHistoryTableCountTr" value=""></div>
-                                            <div class="field"><input type="hidden" class="d-none" name="trTablePraiseBlame" id="teacherPraiseBlameTableCountTr" value=""></div>
-                                            <div class="field"><input type="hidden" class="d-none" name="trTableCulturalLevel" id="teacherculturalLevelTableCountTr" value=""></div>
-                                            <div class="field"><input type="hidden" class="d-none" name="trTablePedagogyCourse" id="teacherpedagogyCourseTableCountTr" value=""></div>
-                                            <div class="field"><input type="hidden" class="d-none" name="trTableShortCourse" id="teacherShortCourseTableCountTr" value=""></div>
-                                            <div class="field"><input type="hidden" class="d-none" name="trTableForeignlanguage" id="teacherForeignlanguageTableCountTr" value=""></div>
-                                            <div class="field"><input type="hidden" class="d-none" name="trTableChildren" id="teacherChildrenTableCountTr" value=""></div>
-                                        </div>
                                     </div> --}}
-
                                 </div>
                             </div>
-                        </form>
+
+
                     </div>
                 </div>
             </div>

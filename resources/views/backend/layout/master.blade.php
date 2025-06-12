@@ -555,7 +555,24 @@
 
     <script>
         $(document).ready(function() {
-            $('#myTable').DataTable();
+            // $('#myTable').DataTable();
+            $('#myTable').DataTable({
+                "language": {
+                    "search": "{{ __('lang.search') }}",
+                    "lengthMenu": "{{ __('lang.show') }} _MENU_ {{ __('lang.records') }}",
+                    "info": "{{ __('lang.showing') }} _START_ {{ __('lang.to') }} _END_ {{ __('lang.of') }} _TOTAL_ {{ __('lang.records') }}",
+                    "infoEmpty": "{{ __('lang.noRecordsFound') }}",
+                    "paginate": {
+                        "next": "{{ __('lang.next') }}",
+                        "previous": "{{ __('lang.previous') }}"
+                    }
+                },
+                "order": [[1, 'asc']],
+                "columnDefs": [
+                    { orderable: false, targets: [2, 3, 4, 5, 6] }
+                ]
+            });
+
 
             setTimeout(function() {
                 $('#tableReload').fadeOut();

@@ -339,6 +339,10 @@
                 }
             });
         });
+
+        $('#link_export').on('click', function () {
+            $('#modalListCanExport').modal('hide');
+        });
     });
 
 

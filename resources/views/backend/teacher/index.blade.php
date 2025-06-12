@@ -199,7 +199,7 @@
                                                                         style="outline: 0;"
                                                                         value="{{ $t->id }}"
                                                                         id="leave_button"
-                                                                        title="Reset password">
+                                                                        title="Leave">
                                                                         <i class="bi bi-box-arrow-up-left"></i> {{__("lang.leave")}}
                                                                     </button>
                                                                 </div>

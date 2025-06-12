@@ -93,18 +93,18 @@
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
                                         <div class="field">
-                                            <label for="">{{__('lang.search')}}</label>
-                                            <input type="text" name="search" placeholder="{{ __('lang.search') }}" value="{{ old('search') }}">
+                                            <label for="search">{{__('lang.search')}}</label>
+                                            <input type="text" name="search" id="search" placeholder="{{ __('lang.search') }}" value="{{ $search ?? old('search') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <div class="field">
-                                            <label for="">{{__("lang.selectacademyYear")}}</label>
+                                            <label for="academy_year">{{__("lang.selectacademyYear")}}</label>
                                             <select class="ui search w-100 dropdown" name="academy_year" id="academy_year">
                                                 <option value="">{{ __('lang.academyYear') }}
                                                 </option>
                                                 @foreach ($years as $y)
-                                                    <option value="{{ $y->year }}"
+                                                    <option value="{{ $y->year }}" @if ($year == $y->year) selected  @endif @if (old('academy_year') == $y->year) selected @endif
                                                         @if (old('academy_year') == $y->year) selected @endif>
                                                         {{ $y->year }}
                                                     </option>
@@ -114,13 +114,14 @@
                                     </div>
                                     <div class="col-md-5 mb-3">
                                         <div class="field">
-                                            <label>{{ __('lang.selectclass') }} </label>
+                                            <label for="class">{{ __('lang.selectclass') }} <small class="text-danger fw-normal">@if (session()->has('selectClass')) * {{ session('selectClass') }} @endif</small></label>
                                             <select class="ui search dropdown1" name="class_id" id="class">
                                                 <option value="">{{ __('lang.selectclass') }}
                                                 </option>
                                                 @foreach ($classes as $cl)
                                                     <option value="{{ $cl->id }}"
-                                                        @if (old('class_id') == $cl->id) selected @endif>
+                                                        @if (old('class_id') == $cl->id) selected @endif
+                                                        @if ($class_id == $cl->id) selected @endif>
                                                         {{ $cl->class_code }} -
                                                         @if (session()->has('localization') && session('localization') == 'en')
                                                             {{ $cl->majors->major_name_en }}
@@ -144,88 +145,175 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-12 text-end">
-                                        <button type="submit" class="ui primary button">  {{ __('lang.search') }} </button>
-                                        <button type="reset" class="ui button"> {{ __('lang.reset') }} </button>
+                                    {{-- <div class="col-md-5 ms-auto mb-3">
+                                        <div class="ui error message"></div>
+                                    </div> --}}
+                                    <div class="col-md-12 text-end ">
+                                        <button type="submit" id="search_btn" class="ui primary button">  {{ __('lang.search') }} </button>
+                                        <a href="{{ route('student.index') }}" type="reset" class="ui button"> {{ __('lang.reset') }} </a>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
-
                 </div>
 
-                <div class="col-lg-12 connectedSortable">
-                    <!-- /.card -->
-                    <!-- DIRECT CHAT -->
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h3 class="card-title">{{__('lang.studentList')}}</h3>
-                            <div class="card-tools">
-                                {{-- <span title="3 New Messages" class="badge text-bg-primary"> 3 </span> --}}
-                                <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                                <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                                <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                                </button>
-                                <div class="ui small icon buttons">
-                                    {{-- <button class="ui button"><i class="file icon"></i></button> --}}
-                                    <a href="{{ route('pdf.student') }}" class="ui red button fw-normal" title="{{ __('lang.exportAsPDF') }}"><i class="bi bi-file-pdf"></i> PDF</a>
-                                    <button class="ui teal button fw-normal" title="{{ __("lang.exportAsExcel") }}"><i class="bi bi-file-earmark-spreadsheet"></i> Excel</button>
-                                    <button class="ui button fw-normal" title="{{__('lang.print')}}"><i class="bi bi-printer"></i> {{__('lang.print')}}</button>
+                @if ($students != null)
+
+                    <div class="col-lg-12 connectedSortable">
+                        <!-- /.card -->
+                        <!-- DIRECT CHAT -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h3 class="card-title">{{__('lang.studentList')}}</h3>
+                                <div class="card-tools">
+                                    {{-- <span title="3 New Messages" class="badge text-bg-primary"> 3 </span> --}}
+                                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                                    <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                                    <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                                    </button>
+                                    <div class="ui small icon buttons">
+                                        {{-- <button class="ui button"><i class="file icon"></i></button> --}}
+                                        <button class="ui button fw-normal" title="{{__('lang.print')}}"><i class="bi bi-printer"></i> {{__('lang.print')}}</button>
+                                        <a href="{{ route('pdf.student') }}" class="ui red button fw-normal" title="{{ __('lang.exportAsPDF') }}"><i class="bi bi-file-pdf"></i> PDF</a>
+                                        <button class="ui teal button fw-normal" title="{{ __("lang.exportAsExcel") }}"><i class="bi bi-file-earmark-spreadsheet"></i> Excel</button>
+                                    </div>
+                                    {{-- <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
+                                    <i class="bi bi-x-lg"></i>
+                                    </button> --}}
                                 </div>
-                                {{-- <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                                <i class="bi bi-x-lg"></i>
-                                </button> --}}
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <!-- Conversations are loaded here -->
-                            <div class="table-responsive position-relative">
-                                <div id="tableReload">
-                                    <div class="dot"></div>
-                                    <div class="dot"></div>
-                                    <div class="dot"></div>
+                            <div class="card-body">
+                                <!-- Conversations are loaded here -->
+                                <div class="table-responsive position-relative">
+                                    <div id="tableReload">
+                                        <div class="dot"></div>
+                                        <div class="dot"></div>
+                                        <div class="dot"></div>
+                                    </div>
+                                    <table class="table" id="myTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">{{__('lang.no')}}</th>
+                                                <th scope="col">{{__('lang.photoProfile')}}</th>
+                                                <th scope="col" class="text-start">{{__('lang.idCard')}}</th>
+                                                <th scope="col">{{__('lang.fullnameKh')}}</th>
+                                                <th scope="col">{{__('lang.nameEn')}}</th>
+                                                <th scope="col">{{__('lang.gender')}}</th>
+                                                <th scope="col">{{__('lang.birthDate')}}</th>
+                                                <th scope="col" colspan="2" class="text-start">{{__('lang.phone')}}</th>
+                                                {{-- <th scope="col" class="text-center">{{__('lang.action')}}</th> --}}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $i = $incre = 1;
+
+                                            @endphp
+                                            @foreach ($students as $student)
+                                            <tr>
+                                                <td>{{$i++}}</td>
+                                                <td><img class="ui mini image" src="{{ asset($student->profile ? $student->profile : 'dist/assets/img/white-image.png') }}" alt=""></td>
+                                                <td class="text-start">{{$student->id_card}}</td>
+                                                <td>{{$student->fullname_kh}}</td>
+                                                <td>{{$student->fullname_en}}</td>
+                                                <td>
+                                                    @if ($student->gender == 'm')
+                                                        <i class="bi bi-gender-male" style="color: #0464ff;"></i>
+                                                    @elseif($student->gender == 'f')
+                                                        <i class="bi bi-gender-female" style="color: #ca0079;"></i>
+                                                    @else
+                                                        
+                                                    @endif
+
+                                                </td>
+                                                <td>{{$student->birth_date ? \Carbon\Carbon::parse($student->birth_date)->format('d-m-Y') : ''}}</td>
+                                                <td class="text-start">
+                                                    @if ($student->phone)
+                                                        <a href="tel:{{ $student->phone }}" class="text-decoration-none text-primary">{{ $student->phone }}</a>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="ui d-flex">
+                                                        <div class="ui floating dropdown dropdown{{ $incre++ }} icon">
+                                                            {{-- <button class="circular ui icon button"></button> --}}
+                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                            <div class="menu">
+                                                                <a title="About" href="{{ route('student.show', $student->id) }}" class="item"><i class="bi bi-eye-fill"></i> {{ __('lang.aboutStudent') }}</a>
+                                                                <a title="Update" href="{{ route('student.edit', $student->id) }}" class="item"><i class="bi bi-pencil-square"></i> {{ __("lang.update") }}</a>
+                                                                <div class="item">
+                                                                    <button type="button" class="m-0 p-0 w-100 d-block border-0 bg-transparent text-start"
+                                                                        style="outline: 0;"
+                                                                        value="{{ $student->id_card }}"
+                                                                        id="resetPass_button"
+                                                                        title="Reset password">
+                                                                        <i class="bi bi-unlock-fill"></i>{{__("lang.resetPassword")}}
+                                                                    </button>
+                                                                    {{-- <i class="bi bi-unlock-fill"></i> {{__("lang.resetPassword")}} --}}
+                                                                </div>
+
+                                                                <div class="item">
+                                                                    <button type="button" class="m-0 p-0 w-100 d-block border-0 bg-transparent text-start"
+                                                                        style="outline: 0;"
+                                                                        value="{{ $student->id }}"
+                                                                        id="leave_button"
+                                                                        title="Leave">
+                                                                        <i class="bi bi-box-arrow-up-left"></i> {{__("lang.dropOut")}}
+                                                                    </button>
+                                                                </div>
+
+                                                                <div class="item text-start">
+                                                                    <button type="button" class="m-0 p-0 w-100 d-block border-0 bg-transparent
+                                                                        {{ $student->block_status == 1 ? 'text-danger' : 'text-success' }} text-start"
+                                                                        style="outline: 0;"
+                                                                        value="{{ $student->id_card }}"
+                                                                        id="{{ $student->block_status == 1 ? 'block_button': 'unblock_button' }}"
+                                                                        title="{{ $student->block_status == 1 ? 'Block' : 'Unblock' }}">
+
+                                                                        <i class="bi {{ $student->block_status == 1 ? 'bi-ban text-danger' : 'bi-arrow-repeat text-success' }}"></i>
+
+                                                                        {{ __('lang.' . ($student->block_status == 1 ? 'block' : 'unblock')) }}
+                                                                    </button>
+                                                                </div>
+                                                                <div class="item text-start">
+                                                                    <button type="button" class="m-0 p-0 w-100 d-block border-0 bg-transparent @if ($student->delete_status == 1) text-danger @else text-success @endif text-start" style="outline: 0;" value="{{ $student->id }}"
+                                                                            @if($student->delete_status == 1)
+                                                                                id="delete_button"
+                                                                            @else
+                                                                                id="restore_button"
+                                                                            @endif
+                                                                                title="@if ($student->delete_status == 1)
+                                                                                Delete
+                                                                            @else
+                                                                                Restore
+                                                                            @endif "> <i class="bi @if ($student->  delete_status == 1)
+                                                                                bi-trash text-danger
+                                                                                @else
+                                                                                bi-arrow-clockwise text-success
+                                                                            @endif "></i>
+                                                                            @if ($student->delete_status == 1)
+                                                                                {{__('lang.delete')}}
+                                                                            @else
+                                                                                {{__('lang.restore')}}
+                                                                            @endif
+                                                                    </button>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <table class="table" id="myTable">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">{{__('lang.no')}}</th>
-                                            <th scope="col">{{__('lang.photoProfile')}}</th>
-                                            <th scope="col" class="text-start">{{__('lang.idCard')}}</th>
-                                            <th scope="col">{{__('lang.fullnameKh')}}</th>
-                                            <th scope="col">{{__('lang.nameEn')}}</th>
-                                            <th scope="col">{{__('lang.gender')}}</th>
-                                            <th scope="col">{{__('lang.birthDate')}}</th>
-                                            <th scope="col" class="text-center">{{__('lang.action')}}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $i = 1;
-                                        @endphp
-                                        @foreach ($students as $student)
-                                        <tr>
-                                            <td>{{$i++}}</td>
-                                            <td><img class="ui mini image" src="{{ asset($student->profile ? $student->profile : 'dist/assets/img/white-image.png') }}" alt=""></td>
-                                            <td class="text-start">{{$student->id_card}}</td>
-                                            <td>{{$student->fullname_kh}}</td>
-                                            <td>{{$student->fullname_en}}</td>
-                                            <td>{{$student->gender}}</td>
-                                            <td>{{$student->birth_date ? \Carbon\Carbon::parse($student->birth_date)->format('d-m-Y') : ''}}</td>
-                                            <td>Actions</td>
-
-
-                                        </tr>
-                                        @endforeach
-
-                                    </tbody>
-
-                                </table>
                             </div>
                         </div>
                     </div>
 
-                </div>
+                @endif
+
             </div>
         </div>
     </div>
@@ -269,7 +357,48 @@
 @endsection
 @section('script')
     <script>
+
+
+        /////////
+
         $(document).ready(function() {
+
+                // var search = $('#search').val();
+                // if(search == ''){
+                //     $(document).on('click', '#search_btn', function () {
+                //         $('.ui.form').form({
+                //             fields: {
+                //                 academy_year: {
+                //                     identifier: 'academy_year',
+                //                     rules: [
+                //                         {
+                //                             type   : 'empty',
+                //                             prompt : '{{ __('lang.pleaseSelectAcademyYear') }}'
+                //                         }
+                //                     ]
+                //                 },
+                //                 class_id: {
+                //                     identifier: 'class_id',
+                //                     rules: [
+                //                         {
+                //                             type   : 'empty',
+                //                             prompt : '{{ __('lang.pleaseSelectClass') }}'
+                //                         }
+                //                     ]
+                //                 },
+                //             }
+                //         });
+                //     });
+
+                // }else{
+                //     alert('search with keyword: ' + search);
+                // }
+
+
+
+
+
+
             $(document).on('click', '#delete_button', function() {
                 var id = $(this).val();
                 var url = "{{ route('teacher.destroy', ':id') }}".replace(':id', id);
@@ -735,12 +864,15 @@
 
     </script>
 
-    {{-- <script>
-        @php
-            $i = 1;
-        @endphp
-        @foreach ($teachers as $index => $t)
-        $(".ui.dropdown{{ $i++ }}").dropdown();
-        @endforeach
-    </script> --}}
+    @if ($students != null)
+        <script>
+            @php
+                $i = 1;
+            @endphp
+            @foreach ($students as $index => $student)
+                $(".ui.dropdown{{ $i++ }}").dropdown();
+            @endforeach
+        </script>
+    @endif
+
 @endsection

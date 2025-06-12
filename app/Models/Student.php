@@ -43,9 +43,13 @@ class Student extends Model
         'sibling',
         'female_sibling',
         'note',
+        'block_status',
+        'blocked_date',
+        'delete_status',
+        'deleted_date',
     ];
 
     public function class(){
-        $this->belongsTo(Studentclass::class, 'class_id');
+        return $this->BelongsTo(Studentclass::class, 'class_id');
     }
 }

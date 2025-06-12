@@ -24,11 +24,40 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
+
+
         $data['years'] = Year::orderBy('id', 'desc')->get();
         $data['classes'] = Studentclass::with('majors', 'departments')->where('delete_status', 1)->orderBy('id', 'desc')->get();
-
+        $data['students'] = '';
         // search here
-        $data['students'] =  Student::all();
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $data['students'] = Student::where('fullname_kh', 'like', '%' . $search . '%')
+                ->orWhere('fullname_en', 'like', '%' . $search . '%')
+                ->orWhere('id_card', 'like', '%' . $search . '%')
+                ->orderBy('id', 'desc')->get();
+                // ->paginate(10);
+        } elseif ($request->has('class_id') && $request->class_id != '') {
+            $class_id = $request->class_id;
+            $data['students'] = Student::where('class_id', $class_id)
+                ->orderBy('id', 'desc')->get();
+                // ->paginate(10);
+        } elseif ($request->has('academy_year') && $request->academy_year !== '') {
+            $academy_year = $request->academy_year;
+            if($request->class_id != ''){
+                $class_id = $request->class_id;
+                $data['students'] = Student::with('studentClass')->where('class_id', $class_id)->orderByDesc('id')->get();
+            }else{
+                return redirect()->back()->with('selectClass', __('lang.pleaseSelectClass'))->withInput();
+            }
+        }else{
+            $data['students'] = null;
+        }
+
+
+        $data['search'] = $request->search ?? '';
+        $data['class_id'] = $request->class_id ?? '';
+        $data['year'] = $request->academy_year ?? '';
 
         return view('backend.student.index', $data);
     }
@@ -305,7 +334,9 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data['student'] = Student::with('class')->findOrFail($id);
+        // dd($data['student']->class->majors->departments->dep_name_en);
+        return view('backend.student.about', $data);
     }
 
     /**

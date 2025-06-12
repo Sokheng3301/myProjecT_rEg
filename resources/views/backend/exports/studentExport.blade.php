@@ -1,4 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student list Export</title>
+    <style>
 
+        @font-face {
+            font-family: 'KhmerOS';
+            src: url("{{ asset('fonts/khmerOS.ttf') }}") format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        * {
+            font-family: 'KhmerOS', sans-serif !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th,td {
+            font-family: 'KhmerOS', sans-serif !important;
+            padding: 5px  10px !important;
+            border: 0.5px solid #000 !important;
+            font-size: 11px !important;
+        }
+        .text-uppercase{
+            text-transform: uppercase !important;
+        }
+    </style>
+</head>
+<body>
 <table class="table table-striped table-hover">
     <thead>
         <tr>
@@ -23,7 +59,7 @@
                 <td class="text-danger">{{ $export->hint_password }}</td>
                 <td>{{ $export->id_card }}</td>
                 <td>{{ $export->fullname_kh }}</td>
-                <td>{{ $export->fullname_en }}</td>
+                <td class="text-uppercase">{{ $export->fullname_en }}</td>
                 <td>{{ $export->birth_date ? \Carbon\Carbon::parse($export->birth_date)->format('m-d-Y') : '' }}</td>
                 <td></td>
             </tr>
@@ -31,3 +67,5 @@
         @endforeach
     </tbody>
 </table>
+</body>
+</html>

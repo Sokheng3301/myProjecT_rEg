@@ -11,6 +11,7 @@ class Studentclass extends Model
     use HasFactory;
     protected $table = 'classes';
     protected $fillable = [
+        'id',
         'class_code',
         'major_id',
         'level_study',
@@ -28,4 +29,13 @@ class Studentclass extends Model
     public function departments(){
         return $this->BelongsTo(Department::class, 'department_id');
     }
+
+    // public function students()
+    // {
+    //     return $this->BelongsTo(Student::class, 'class_id');
+    // }
+
+    // public function student(){
+    //     return $this->hasMany(Student::class, 'class_id');
+    // }
 }
