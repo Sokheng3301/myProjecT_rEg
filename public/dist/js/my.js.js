@@ -45,3 +45,19 @@ $(document).ready(function () {
 // $( "#datepicker14" ).datepicker();
 // $( "#datepicker15" ).datepicker();
 // $( "#datepicker16" ).datepicker();
+// $('#preload-submit').hide();
+
+$('form').submit(function() {
+    var submitButton = $('button[type="submit"]');
+    submitButton.prop('disabled', true);
+    submitButton.addClass('loading');
+
+    setTimeout(function() {
+        submitButton.prop('disabled', false);
+        submitButton.removeClass('loading');
+    }, 3000);
+});
+
+// $(document).ready(function () {
+//     $('form select, form input').attr('disabled', true).css('cursor', 'not-allowed');
+// });

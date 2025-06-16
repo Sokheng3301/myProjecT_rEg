@@ -41,8 +41,8 @@
                             </h3>
                             <div class="card-tools">
                                 {{-- <span title="3 New Messages" class="badge text-bg-primary"> 3 </span> --}}
-                                <a href="@if($student && $student->leave_status == 0)
-                                    {{ route('student.leaveList') }}
+                                <a href="@if($student && $student->dropout_status == 0)
+                                    {{ route('student.dropoutList') }}
                                 @else
                                     {{ route('student.index') }}
                                 @endif" class="ui button small">
@@ -104,11 +104,14 @@
                                             <div class="field">
                                                 <label>{{ __('lang.academyYear') }} <span
                                                         class="text-danger">*</span></label>
-                                                <select class="ui search dropdown" name="academy_year" id="academy_year">
+                                                <select class="ui search dropdown" @if ($update)
+                                                    disabled
+                                                @endif name="academy_year" id="academy_year" >
                                                     <option value="">{{ __('lang.academyYear') }}
                                                     </option>
                                                     @foreach ($years as $y)
                                                         <option value="{{ $y->year }}"
+                                                            @if ($update && $student->class->academy_year == $y->year) selected @endif
                                                             @if (old('academy_year') == $y->year) selected @endif>
                                                             {{ $y->year }}
                                                         </option>
@@ -120,11 +123,12 @@
                                             <div class="field">
                                                 <label>{{ __('lang.selectclass') }} <span
                                                         class="text-danger">*</span></label>
-                                                <select class="ui search dropdown1" name="class_id" id="class">
+                                                <select class="ui search dropdown1" name="class_id" id="class" @if ($update)  disabled  @endif>
                                                     <option value="">{{ __('lang.selectclass') }}
                                                     </option>
                                                     @foreach ($classes as $cl)
                                                         <option value="{{ $cl->id }}"
+                                                            @if ($update && $student->class_id == $cl->id) selected @endif
                                                             @if (old('class_id') == $cl->id) selected @endif>
                                                             {{ $cl->class_code }} -
                                                             @if (session()->has('localization') && session('localization') == 'en')
@@ -150,21 +154,22 @@
                                             </div>
 
 
-                                            <div class="two fields">
-                                                <div class="field">
+                                            <div class=" @if(!$update) two @endif  fields">
+                                                <div class="field @if($update) w-100 @endif">
                                                     <label>{{ __('lang.username') }} <span class="text-danger">*</span>
                                                         @if ($errors->has('username'))
                                                             <small
                                                                 class="fw-normal text-danger">{{ $errors->first('username') }}</small>
                                                         @endif
                                                     </label>
-                                                    <input type="text" name="username" readonly id="username" class="text-danger"
+                                                    <input type="text" @if ($update) disabled @endif readonly
+                                                        name="username" id="username" class="text-danger"
                                                         placeholder="{{ __('lang.username') }}"
-                                                        value="{{ old('username') }}">
+                                                        value="@if($update){{ $authInfo->username }}@else{{ old('username') }}@endif">
                                                 </div>
 
 
-                                                <div class="field">
+                                                <div class="field @if($update)d-none @endif">
                                                     <label>{{ __('lang.password') }} <span
                                                             class="text-danger">*</span></label>
                                                     {{-- <div class="ui  input">
@@ -177,7 +182,7 @@
                                                         {{-- <label for="amount" class="ui label">$</label> --}}
                                                         <input type="password" name="password" id="password"
                                                             placeholder="{{ __('lang.password') }}"
-                                                            value="">
+                                                            value="@if($update) 3301 @endif">
                                                         <button type="button" id="random_password" title="{{ __("lang.random") }}" class="ui green mini button"><i class="bi bi-shuffle fw-bold"></i></button>
                                                     </div>
                                                 </div>
@@ -198,22 +203,22 @@
                                                             class="text-danger">*</span></label>
                                                     <input type="text" name="fullname_kh"
                                                         placeholder="{{ __('lang.fullnameKh') }}"
-                                                        value="{{ old('fullname_kh') }}">
+                                                        value="@if($update){{ $student->fullname_kh }}@else{{ old('fullname_kh') }}@endif">
                                                 </div>
                                                 <div class="field">
                                                     <label>{{ __('lang.fullnameEn') }} <span
                                                             class="text-danger">*</span></label>
                                                     <input type="text" name="fullname_en"
                                                         placeholder="{{ __('lang.fullnameEn') }}"
-                                                        value="{{ old('fullname_en') }}">
+                                                        value="@if($update){{ $student->fullname_en }}@else{{ old('fullname_en') }}@endif">
                                                 </div>
                                                 <div class="field">
                                                     <label>{{ __('lang.gender') }} <span
                                                             class="text-danger">*</span></label>
                                                     <select class="ui search dropdown2" name="gender">
                                                         <option value="">{{ __('lang.selectGender') }}</option>
-                                                        <option value="f" @if (old('gender') == 'f') selected @endif>{{ __('lang.female') }}</option>
-                                                        <option value="m" @if (old('gender') == 'm') selected @endif>{{ __('lang.male') }}</option>
+                                                        <option value="f" @if($update && $student->gender == 'f') selected @endif  @if (old('gender') == 'f') selected @endif>{{ __('lang.female') }}</option>
+                                                        <option value="m" @if($update && $student->gender == 'm') selected @endif  @if (old('gender') == 'm') selected @endif>{{ __('lang.male') }}</option>
                                                     </select>
                                                 </div>
 
@@ -288,42 +293,51 @@
                                             <div class="field">
                                                 <label for="">{{__('lang.birthDate')}}</label>
                                                 <input type="text" name="birth_date"
-                                                    id="datepicker" value="{{ old('birth_date') ? \Carbon\Carbon::pase(old('birth_date'))->formath('d/m/Y') : ''}}"
+                                                    id="datepicker"
+                                                    value="@if($update){{ $student->birth_date ? \Carbon\Carbon::parse($student->birth_date)->format('m/d/Y') : '' }}@else{{ old('birth_date') ? \Carbon\Carbon::pase(old('birth_date'))->formath('m/d/Y') : '' }}@endif"
                                                     placeholder="{{ __('lang.birthDate') }}">
                                                 </div>
 
                                             <div class="two fields">
                                                 <div class="field">
                                                     <label for="">{{__('lang.national')}}</label>
-                                                    <input type="text" name="national" placeholder="{{ __('lang.national') }}" value="{{ old('national') }}">
+                                                    <input type="text" name="national"
+                                                    placeholder="{{ __('lang.national') }}"
+                                                    value="@if($update){{ $student->national }}@else{{ old('national') }}@endif">
                                                 </div>
                                                 <div class="field">
                                                     <label for="">{{__('lang.nationality')}}</label>
-                                                    <input type="text" name="nationality" placeholder="{{ __('lang.nationality') }}" value="{{ old('nationality') }}">
+                                                    <input type="text" name="nationality"
+                                                    placeholder="{{ __('lang.nationality') }}"
+                                                    value="@if($update){{ $student->nationality }}@else{{ old('nationality')}}@endif">
                                                 </div>
                                             </div>
 
                                             <div class="field">
                                                 <label for="">{{__('lang.placeBirth')}}</label>
-                                                <textarea name="place_of_birth" id="" cols="30" rows="5" placeholder="{{__('lang.placeBirth')}}">{{old('place_of_birth')}}</textarea>
+                                                <textarea name="place_of_birth" id="" cols="30" rows="5"
+                                                placeholder="{{__('lang.placeBirth')}}">@if($update){{$student->place_of_birth}}@else{{old('place_of_birth')}}@endif</textarea>
                                             </div>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="field">
                                                 <label for="">{{__('lang.phone_number')}}</label>
-                                                <input type="text" name="phone" placeholder="{{ __('lang.phone_number') }}" value="{{ old('phone') }}">
+                                                <input type="text" name="phone" placeholder="{{ __('lang.phone_number') }}"
+                                                value="@if($update){{ $student->phone }}@else{{ old('phone') }}@endif">
                                             </div>
 
                                             <div class="field">
                                                 <label for="">{{__('lang.email_add')}}</label>
-                                                <input type="email" name="email" placeholder="{{ __('lang.email_add') }}" value="{{ old('email') }}">
+                                                <input type="email" name="email" placeholder="{{ __('lang.email_add') }}"
+                                                value="@if($update){{ $student->email }}@else{{ old('email') }}@endif">
                                             </div>
 
 
                                             <div class="field">
                                                 <label for="">{{__('lang.current_add')}}</label>
-                                                <textarea name="current_add" id="" cols="30" rows="5" placeholder="{{__('lang.current_add')}}">{{old('current_add')}}</textarea>
+                                                <textarea name="current_add" id="" cols="30" rows="5"
+                                                placeholder="{{__('lang.current_add')}}">@if($update){{$student->current_add}}@else{{old('current_add')}}@endif</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -351,41 +365,44 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if ($update)
+                                            @if ($update && $student_study_history->count() > 0)
+                                                {{-- if update and have study history --}}
                                                 @php
-                                                    $increment = 1;
+                                                    $i = 1;
                                                 @endphp
-                                                @foreach ($student_workhistories as $workHistory)
+                                                @foreach ($student_study_history as $studyHistory)
                                                     <tr>
                                                         <td class="field">
-                                                            <input type="text"
-                                                                name="work_continue_{{ $increment }}"
-                                                                placeholder="{{ __('lang.workContinue') }}"
-                                                                value="{{ $workHistory->work_continue }}">
+                                                            <input type="text" name="level_class_{{ $i }}" value="{{ $studyHistory->class_level }}"
+                                                                placeholder="{{ __('lang.levelClass') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text"
-                                                                name="current_working_{{ $increment }}"
-                                                                placeholder="{{ __('lang.currentWorkingUnit') }}"
-                                                                value="{{ $workHistory->current_working }}">
+                                                            <input type="text" name="school_name_{{ $i }}" value="{{ $studyHistory->school_name }}"
+                                                                placeholder="{{ __('lang.schoolName') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text"
-                                                                id="workStartdate{{ $increment }}"
-                                                                name="work_start_date_{{ $increment }}"
-                                                                placeholder="{{ __('lang.startDate') }}"
-                                                                value="{{ $workHistory->work_start_date }}">
+                                                            <input type="text"  name="province_{{ $i }}" value="{{ $studyHistory->province }}"
+                                                                placeholder="{{ __('lang.province') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text"
-                                                                id="workFinishdate{{ $increment + 1 }}"
-                                                                name="work_finish_date_{{ $increment }}"
-                                                                placeholder="{{ __('lang.finishDate') }}"
-                                                                value="{{ $workHistory->work_finish_date }}">
+                                                            <input type="number" min="0" name="start_year_{{ $i }}" value="{{ $studyHistory->start_year }}"
+                                                                placeholder="{{ __('lang.startYear') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="number" min="0" name="end_year_{{ $i }}" value="{{ $studyHistory->end_year }}"
+                                                                placeholder="{{ __('lang.endYear') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="certification_{{ $i }}" value="{{ $studyHistory->certification }}"
+                                                                placeholder="{{ __('lang.certificateRecieve') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="rank_{{ $i }}" value="{{ $studyHistory->rank }}"
+                                                                placeholder="{{ __('lang.rank') }}">
                                                         </td>
                                                     </tr>
                                                     @php
-                                                        $increment++;
+                                                        $i++;
                                                     @endphp
                                                 @endforeach
 
@@ -637,29 +654,29 @@
                                                 @php
                                                     $increment = 1;
                                                 @endphp
-                                                @foreach ($student_workhistories as $workHistory)
+                                                @foreach ($student_sibling as $studnetSibling)
                                                     <tr>
                                                         <td class="field">
-                                                            <input type="text" name="name_{{ $increment }}"
+                                                            <input type="text" name="name_{{ $increment }}" value="{{ $studnetSibling->name }}"
                                                                 placeholder="{{ __('lang.name') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text" name="gender_{{ $increment }}"
+                                                            <input type="text" name="gender_{{ $increment }}" value="{{ $studnetSibling->gender }}"
                                                                 placeholder="{{ __('lang.gender') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text"  name="birth_date_{{ $increment }}" id="birth_date{{ $increment }}"
+                                                            <input type="text"  name="birth_date_{{ $increment }}" id="birth_date{{ $increment }}" value="{{ $studnetSibling->birth_date ? \Carbon\Carbon::parse($studnetSibling->birth_date)->format('d/m/Y') : '' }}"
                                                                 placeholder="{{ __('lang.birthDate') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text" name="occupation_{{ $increment }}"
+                                                            <input type="text" name="occupation_{{ $increment }}" value="{{ $studnetSibling->occupation }}"
                                                                 placeholder="{{ __('lang.occupation') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text" name="current_add_{{ $increment }}" placeholder="{{ __('lang.current_add') }}">
+                                                            <input type="text" name="current_add_{{ $increment }}" placeholder="{{ __('lang.current_add') }}" value="{{ $studnetSibling->current_add }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text" name="phone_{{ $increment }}"
+                                                            <input type="text" name="phone_{{ $increment }}" value="{{ $studnetSibling->phone }}"
                                                                 placeholder="{{ __('lang.phone') }}">
                                                         </td>
                                                     </tr>
@@ -784,6 +801,7 @@
                                         </button>
                                     </div>
                                 </div>
+
 
                                 <div class="col-md-6 d-none">
                                     <div class="two fields">

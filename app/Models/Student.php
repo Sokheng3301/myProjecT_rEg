@@ -28,6 +28,7 @@ class Student extends Model
         'email',
         'place_of_birth',
         'current_add',
+
         'father_name',
         'father_age',
         'father_occupation',

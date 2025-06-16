@@ -85,8 +85,8 @@
     <link rel="stylesheet" href="{{ asset('dist/css/jquery-ui.css') }}">
 
     {{-- <link rel="stylesheet" href="{{ asset('dist/css/autoFill.bootstrap4.min.css') }}"> --}}
-    <link rel="stylesheet" href="{{ asset('dist/css/my.css.css') }}">
     <link rel="stylesheet" href="{{ asset('dist/css/semantic.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dist/css/my.css.css') }}">
     <title>@yield('title') | REG-KSIT</title>
     <style>
         /* h3.mb-0{
@@ -138,6 +138,7 @@
             /* top: -500px; */
         }
 
+
         .loader {
             height: 6px;
             width: 200px;
@@ -172,6 +173,36 @@
         .fix-height{
             min-height: 100vh !important;
         }
+
+         /* #preload-submit {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #48484833;
+            z-index: 1000000;
+            flex-direction: column;
+        }
+        .loader-submit {
+            width: 70px;
+            --b: 17px;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            padding: 1px;
+            background: conic-gradient(#0000 10%,#000000) content-box;
+            -webkit-mask:
+                repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
+                radial-gradient(farthest-side,#0000 calc(100% - var(--b) - 1px),#000 calc(100% - var(--b)));
+            -webkit-mask-composite: destination-in;
+                    mask-composite: intersect;
+            animation:l4 1.5s infinite steps(10);
+            }
+        @keyframes l4 {to{transform: rotate(1turn)}}
+        */
+
+
     </style>
     @yield('css')
 
@@ -186,8 +217,12 @@
                 alt="">
             <h1 class="ui large header mb-4">{{ __('lang.welcomeToSystem') }}</h1>
             <div class="loader"></div>
+
         </div>
     @endif
+    {{-- <div id="preload-submit" class="d-none">
+        <div class="loader-submit"></div>
+    </div> --}}
 
 
     <!--begin::App Wrapper-->

@@ -7,7 +7,7 @@ class AppHelper
     const LEVEL_BACHELOR = 1;
     const LEVEL_ASSOCIATE = 2;
     const LEVEL_VOCATION = 3;
-    
+
     const LEVEL = [
         self::LEVEL_BACHELOR => 'bacheclor',
         self::LEVEL_ASSOCIATE => 'associate',
@@ -19,6 +19,12 @@ class AppHelper
         return array_map(function($key) {
             return __('lang.' . $key);
         }, self::LEVEL);
+    }
+
+    public static function studyLevel($level)
+    {
+        // Check if the level exists in the LEVEL array
+        return isset(self::LEVEL[$level]) ? __('lang.' . self::LEVEL[$level]) : __('lang.null');
     }
 
 
@@ -38,5 +44,10 @@ class AppHelper
         return array_map(function($key) {
             return __('lang.' . $key);
         }, self::YEAR_LEVEL);
+    }
+    public static function yearLevel($level)
+    {
+        // Check if the level exists in the YEAR_LEVEL array
+        return isset(self::YEAR_LEVEL[$level]) ? __('lang.' . self::YEAR_LEVEL[$level]) : __('lang.null');
     }
 }

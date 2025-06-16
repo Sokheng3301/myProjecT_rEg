@@ -89,6 +89,7 @@ Route::middleware(['auth', 'lang', 'auto.app'])->group(function () {
         Route::post('student/create/multiple/save', [StudentController::class, 'storeMultiple'])->name('student.storeMultiple');
         Route::get('student/preview-list/{class_id}', [StudentController::class, 'preview'])->name('student.preview');
         Route::get('student/export-list/{class_id}', [StudentController::class, 'exportList'])->name('student.saveExport');
+        Route::get('student/dropout/list', [StudentController::class, 'dropoutList'])->name('student.dropoutList');
 
         // PDF route
         Route::get('student/list/export/pdf', [ExportPDFController::class, 'exportPdf'])->name('pdf.student');

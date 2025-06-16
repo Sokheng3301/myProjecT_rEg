@@ -24,8 +24,6 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-
-
         $data['years'] = Year::orderBy('id', 'desc')->get();
         $data['classes'] = Studentclass::with('majors', 'departments')->where('delete_status', 1)->orderBy('id', 'desc')->get();
         $data['students'] = '';
@@ -200,6 +198,12 @@ class StudentController extends Controller
     {
         $data['student'] = null;
         $data['update'] = null;
+        $data['student_study_history'] = null;
+        $data['student_sibling'] = null;
+        $data['authInfo'] = null;
+        $data['previewlists'] = null;
+        $data['search'] = null;
+        $data['class_id'] = null;
         $data['years'] = Year::orderBy('id', 'desc')->get();
         $data['classes'] = Studentclass::with('majors', 'departments')->where('delete_status', 1)->orderBy('id', 'desc')->get();
         $data['departments'] = Department::where('delete_status', 1)->orderBy('id', 'desc')->get();
@@ -335,6 +339,8 @@ class StudentController extends Controller
     public function show(string $id)
     {
         $data['student'] = Student::with('class')->findOrFail($id);
+        $data['student_study_history'] = Student_studyhistory::where('id_card', $data['student']->id_card)->get();
+        $data['student_sibling'] = Student_sibling::where('id_card', $data['student']->id_card)->get();
         // dd($data['student']->class->majors->departments->dep_name_en);
         return view('backend.student.about', $data);
     }
@@ -344,7 +350,16 @@ class StudentController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data['update'] = true;
+        $data['student'] = Student::with('class')->findOrFail($id);
+        $data['years'] = Year::orderBy('id', 'desc')->get();
+        $data['classes'] = Studentclass::with('majors', 'departments')->where('delete_status', 1)->orderBy('id', 'desc')->get();
+        $data['departments'] = Department::where('delete_status', 1)->orderBy('id', 'desc')->get();
+        $data['student_study_history'] = Student_studyhistory::where('id_card', $data['student']->id_card)->get();
+        $data['student_sibling'] = Student_sibling::where('id_card', $data['student']->id_card)->get();
+        $data['years'] = Year::orderBy('id', 'desc')->get();
+        $data['authInfo'] = User::where('id_card', $data['student']->id_card)->first();
+        return view('backend.student.form', $data);
     }
 
     /**

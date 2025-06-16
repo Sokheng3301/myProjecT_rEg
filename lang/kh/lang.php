@@ -539,5 +539,10 @@ return[
     'noRecordsFound' => 'មិនមានកំណត់ត្រាណាមួយទេ',
     'aboutStudent' => 'អំពីនិស្សិត',
     'dropOut' => 'បោះបង់ការសិក្សា',
+    'studentProfile' => 'ប្រវត្តិរូបនិស្សិត',
+    'studentPhoto' => 'រូបថតនិស្សិត',
+    'startAcademyYear' => 'ចាប់ផ្តើមឆ្នាំសិក្សា',
+    'noDataAvailable' => 'មិនមានទិន្នន័យ',
+    'updateStudent' => 'កែប្រែនិស្សិត',
 
 ];

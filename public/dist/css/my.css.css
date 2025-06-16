@@ -36,3 +36,26 @@ nav ul li p{
 .file-upload img{
     margin: auto;
 }
+
+/* input:disabled,
+select:disabled,
+textarea:disabled {
+
+    background-color: #e0e0e0 !important;
+    color: #000000 !important;
+    border: 1px solid #434343 !important;
+
+} */
+
+input:hover,
+select:hover,
+textarea:hover {
+    input:disabled,
+    select:disabled,
+    textarea:disabled {
+        background-color: #e0e0e0 !important;
+        color: #000000 !important;
+        border: 1px solid #434343 !important;
+        cursor: not-allowed !important;
+    }
+}
