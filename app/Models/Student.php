@@ -18,6 +18,9 @@ class Student extends Model
         'generation',
         'class_id',
         'dropout_status',
+        'dropout_reason',
+        'dropout_date',
+        'dropout_by',
         'grauduate_staus',
         'gender',
         'birth_date',
@@ -46,6 +49,8 @@ class Student extends Model
         'note',
         'block_status',
         'blocked_date',
+        'blocked_by',
+
         'delete_status',
         'deleted_date',
     ];

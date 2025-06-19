@@ -109,7 +109,7 @@
                                             <th scope="col">{{__('lang.birthDate')}}</th>
                                             <th scope="col">{{__('lang.department')}}</th>
                                             <th scope="col">{{__('lang.phoneNumber')}}</th>
-                                            <th scope="col">{{__('lang.blocked')}}</th>
+                                            <th scope="col">{{__('lang.accountStatus')}}</th>
                                             <th scope="col" class="text-center">{{__('lang.action')}}</th>
                                         </tr>
                                     </thead>

@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\StudentByClassExport;
 use App\Models\User;
 use App\Models\Year;
 use App\Models\Student;
 use App\Models\Department;
-use App\Models\Student_sibling;
-use App\Models\Student_studyhistory;
 use App\Models\Studentclass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Models\Student_sibling;
+use function PHPSTORM_META\map;
+use App\Models\Student_studyhistory;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
-
-use function PHPSTORM_META\map;
+use App\Exports\StudentByClassExport;
+use PHPUnit\Framework\MockObject\Builder\Stub;
 
 class StudentController extends Controller
 {
@@ -33,18 +36,23 @@ class StudentController extends Controller
             $data['students'] = Student::where('fullname_kh', 'like', '%' . $search . '%')
                 ->orWhere('fullname_en', 'like', '%' . $search . '%')
                 ->orWhere('id_card', 'like', '%' . $search . '%')
+                ->where('dropout_status', 1) // only show active students
                 ->orderBy('id', 'desc')->get();
                 // ->paginate(10);
         } elseif ($request->has('class_id') && $request->class_id != '') {
             $class_id = $request->class_id;
             $data['students'] = Student::where('class_id', $class_id)
+                ->where('dropout_status', 1) // only show active students
                 ->orderBy('id', 'desc')->get();
                 // ->paginate(10);
         } elseif ($request->has('academy_year') && $request->academy_year !== '') {
             $academy_year = $request->academy_year;
             if($request->class_id != ''){
                 $class_id = $request->class_id;
-                $data['students'] = Student::with('studentClass')->where('class_id', $class_id)->orderByDesc('id')->get();
+                $data['students'] = Student::with('studentClass')
+                                    ->where('class_id', $class_id)
+                                    ->where('dropout_status', 1) // only show active students
+                                    ->orderByDesc('id')->get();
             }else{
                 return redirect()->back()->with('selectClass', __('lang.pleaseSelectClass'))->withInput();
             }
@@ -204,6 +212,7 @@ class StudentController extends Controller
         $data['previewlists'] = null;
         $data['search'] = null;
         $data['class_id'] = null;
+        $data['class'] = null;
         $data['years'] = Year::orderBy('id', 'desc')->get();
         $data['classes'] = Studentclass::with('majors', 'departments')->where('delete_status', 1)->orderBy('id', 'desc')->get();
         $data['departments'] = Department::where('delete_status', 1)->orderBy('id', 'desc')->get();
@@ -259,7 +268,7 @@ class StudentController extends Controller
             'fullname_en' => $request->fullname_en,
             'class_id' => $request->class_id,
             'gender' => $request->gender,
-            'birth_date' => $request->birth_date ? Carbon::parse($request->birth_date)->format('Y-m-d') : '',
+            'birth_date' => $request->birth_date ? Carbon::parse($request->birth_date)->format('Y-m-d') : NULL,
             'hint_password' => $request->password,
             'national' => $request->national,
             'nationality' => $request->nationality,
@@ -359,6 +368,23 @@ class StudentController extends Controller
         $data['student_sibling'] = Student_sibling::where('id_card', $data['student']->id_card)->get();
         $data['years'] = Year::orderBy('id', 'desc')->get();
         $data['authInfo'] = User::where('id_card', $data['student']->id_card)->first();
+
+
+        $id = $data['student']->class_id;
+        // $checkMaxIdInStudent = Student::where('class_id', $id)->max('id_card');
+
+
+        // $classes = Studentclass::findOrFail($class_id);
+
+        $data['class'] = StudentClass::with(['majors' , 'departments'])->findOrFail($id);
+        // dd($data['class']->majors->departments->dep_name_en);
+        // $studyLevel = collect(\App\Http\Helpers\AppHelper::getStudyLevel())->get($class->level_study);
+        // $yearLevel = collect(\App\Http\Helpers\AppHelper::getYearLevel())->get($class->year_level);
+        // $graduated = $class->graduate_status == 1 ? __('lang.studying') :  __('lang.graduated');
+        // $deleted_at = $class->deleted_date != '' ? Carbon::parse($class->deleted_date)->format('d-m-Y') : __("lang.na");
+        // $deleted_by = $class->deleted_by != '' ? $class->deleted_by : __("lang.na");
+        // $created_at = Carbon::parse($class->created_at)->format('d-m-Y h:i:s a');
+
         return view('backend.student.form', $data);
     }
 
@@ -367,16 +393,163 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $studentRun = false;
+        $studyHistoryRun = false;
+        $siblingRun = false;
+
+
+        $studentInfo = Student::findOrFail($id);
+        $studentId = $studentInfo->id_card;
+
+        // dd($studentId);
+
+        $request->validate([
+            'fullname_kh' => 'required|string|max:255',
+            'fullname_en' => 'required|string|max:255',
+            'gender' => 'required|string',
+        ]);
+
+        // student info
+
+        if($request->hasFile('profile')){
+            if($studentInfo->profile != null){
+                if(File::exist($studentInfo->profile)){
+                    File::delete($studentInfo->profile);
+                }
+            }
+
+            $profile = $request->file('profile')->store('uploads/students', 'custom');
+        }else{
+            $profile = $studentInfo->profile;
+        }
+
+        $data['students'] = [
+            'profile' => $profile,
+            'fullname_kh' => $request->fullname_kh,
+            'fullname_en' => $request->fullname_en,
+            'gender' => $request->gender,
+            'birth_date' => $request->birth_date ? Carbon::parse($request->birth_date)->format('Y-m-d') : NULL,
+            'national' => $request->national,
+            'nationality' => $request->nationality,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'place_of_birth' => $request->place_of_birth,
+            'current_add' => $request->current_add,
+
+            'father_name' => $request->father_name,
+            'father_age' => $request->father_age,
+            'father_occupation' => $request->father_occupation,
+            'father_phone' => $request->father_phone,
+            'father_add' => $request->father_current_add,
+
+            'mother_name' => $request->mother_name,
+            'mother_age' => $request->mother_age,
+            'mother_occupation' => $request->mother_occupation,
+            'mother_phone' => $request->mother_phone,
+            'mother_add' => $request->mother_current_add,
+
+            'sibling' => $request->sibling,
+            'female_sibling' => $request->female_sibling,
+        ];
+
+        $updateStudent = Student::where('id', $id)->update($data['students']);
+        if($updateStudent == true) $studentRun = true;
+
+
+
+
+        $countTableRowStudentHistory = $request->student_study_history_count_tr;
+        $countTableRowStudentSibling = $request->student_sibling_count_tr;
+
+        // dd($countTableRowStudentHistory . ' - ' . $countTableRowStudentSibling);
+
+        // find in student study history
+        $studentStudyHistory = Student_studyhistory::where('id_card', $studentId)->get();
+        if($studentStudyHistory->count() > 0){
+            // Delete existing study history and sibling records'
+            Student_studyhistory::where('id_card', $studentId)->delete();
+            for($i=1; $i<=$countTableRowStudentHistory; $i++){
+                $data['study_history'] = [
+                    'id_card' => $studentId,
+                    'class_level' => $request->{'level_class_'.$i},
+                    'school_name' => $request->{'school_name_'.$i},
+                    'province' => $request->{'province_'.$i},
+                    'start_year' => $request->{'start_year_'.$i},
+                    'end_year' => $request->{'end_year_'.$i},
+                    'certification' => $request->{'certification_'.$i},
+                    'rank' => $request->{'rank_'.$i},
+                ];
+
+                // model here
+                $createInStudentStudyHistory = Student_studyhistory::create($data['study_history']);
+            }
+        }else{
+            for($i=1; $i<=$countTableRowStudentHistory; $i++){
+                $data['study_history'] = [
+                    'id_card' => $studentId,
+                    'class_level' => $request->{'level_class_'.$i},
+                    'school_name' => $request->{'school_name_'.$i},
+                    'province' => $request->{'province_'.$i},
+                    'start_year' => $request->{'start_year_'.$i},
+                    'end_year' => $request->{'end_year_'.$i},
+                    'certification' => $request->{'certification_'.$i},
+                    'rank' => $request->{'rank_'.$i},
+                ];
+
+                // model here
+                $createInStudentStudyHistory = Student_studyhistory::create($data['study_history']);
+            }
+        }
+        if($createInStudentStudyHistory == true) $studyHistoryRun = true;
+
+
+        // find in student sibling
+        $studentSibling = Student_sibling::where('id_card', $studentId)->get();
+        if($studentSibling->count() > 0){
+            // Delete existing sibling records
+            Student_sibling::where('id_card', $studentId)->delete();
+            for($i=1; $i<=$countTableRowStudentSibling; $i++){
+                $data['sibling'] = [
+                    'id_card' => $studentId,
+                    'name' => $request->{'name_'.$i},
+                    'gender' => $request->{'gender_'.$i},
+                    'birth_date' => $request->{'birth_date_'.$i} ? Carbon::parse($request->{'birth_date_'.$i})->format('Y-m-d') : '',
+                    'occupation' => $request->{'occupation_'.$i},
+                    'current_add' => $request->{'current_add_'.$i},
+                    'phone' => $request->{'phone_'.$i},
+                ];
+
+                // model here
+                $createInStudentSibling = Student_sibling::create($data['sibling']);
+            }
+        }else{
+            for($i=1; $i<=$countTableRowStudentSibling; $i++){
+                $data['sibling'] = [
+                    'id_card' => $studentId,
+                    'name' => $request->{'name_'.$i},
+                    'gender' => $request->{'gender_'.$i},
+                    'birth_date' => $request->{'birth_date_'.$i} ? Carbon::parse($request->{'birth_date_'.$i})->format('Y-m-d') : '',
+                    'occupation' => $request->{'occupation_'.$i},
+                    'current_add' => $request->{'current_add_'.$i},
+                    'phone' => $request->{'phone_'.$i},
+                ];
+
+                // model here
+                $createInStudentSibling = Student_sibling::create($data['sibling']);
+            }
+        }
+        if($createInStudentSibling == true) $siblingRun = true;
+
+
+
+        if($updateStudent && $studentRun && $studyHistoryRun && $siblingRun == true){
+            return redirect()->route('student.index')->with('success', __("lang.updateStudentSuccess"));
+        }else{
+            return redirect()->back()->with('error', __("lang.updateStudentError"))->withInput();
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+
 
     public function getClassByYear(Request $request)
     {
@@ -469,4 +642,107 @@ class StudentController extends Controller
 
         ]);
     }
+
+    public function resetPass(Request $request) {
+        // Validate the incoming request
+        $request->validate([
+            'id' => 'required|integer',
+            'password' => 'required|string',
+        ]);
+
+        // Attempt to find the user by ID
+        $user = User::where('id_card', $request->id)->first();
+
+        if (!$user) {
+            return response()->json(['error' => __('lang.userNotFound')], 404);
+        }
+
+        // Check if the provided password matches the current user's password
+        if (Hash::check($request->password, @Auth::user()->password)) {
+            // Update the password
+            $newPassword = Hash::make('1234');
+            $user->password = $newPassword;
+
+            if ($user->save()) {
+                return response()->json(['success' => __('lang.resetPassSuccess')]);
+            } else {
+                return response()->json(['error' => __('lang.resetPassError')], 422);
+            }
+        } else {
+            return response()->json(['error' => __('lang.invalidPassword')], 422);
+        }
+    }
+
+
+    public function leave(Request $request, string $id)
+    {
+        $request->validate([
+            'leave_date' => 'required|date',
+            'leave_reason' => 'required|string|max:255',
+        ]);
+
+        if(validator($request->all())->fails()){
+            return response()->json(['error' => __('lang.StudentDropoutError')], 422);
+        }
+
+        $leave_date = Carbon::parse($request->leave_date)->format('Y-m-d');
+        $leave_description = $request->leave_reason;
+
+        // Find the teacher by ID
+        $student = Student::findOrFail($id);
+
+        if ($student) {
+            if($student->dropout_status == 1){
+                // Delete
+                $student->update(['dropout_status' => 0, 'dropout_date' => $leave_date, 'dropout_reason' => $leave_description, 'dropout_by' => @Auth::user()->name]);
+                return redirect()->back()->with('success', __('lang.leavestudentSuccess'));
+            }else{
+                // Restore
+                $student->update(['dropout_status' => 1]);
+                return redirect()->back()->with('success', __('lang.rebackstudentSuccess'));
+            }
+        } else {
+            return redirect()->back()->with('error', __('lang.leavestudentError'));
+        }
+    }
+
+
+    public function destroy(string $id)
+    {
+        $student = Student::findOrFail($id);
+        if ($student) {
+            if($student->delete_status == 1){
+                // Delete
+                $student->update(['delete_status' => 0, 'deleted_at' => now(), 'deleted_by' => @Auth::user()->name]);
+                return response()->json(['success' => __('lang.deletestustudentSuccess')], 200);
+            }else{
+                // Restore
+                $student->update(['delete_status' => 1]);
+                return response()->json(['success' => __('lang.restorestustudentSuccess')], 200);
+            }
+        } else {
+            return response()->json(['error' => __('lang.deletestustudentError')], 404);
+        }
+    }
+
+    public function block(string $id){
+        $User = User::where('id_card', $id)->get()->first();
+        $student = Student::where('id_card', $id);
+
+
+        if($User){
+            if($User->block_status == 1){
+                $User->update(['block_status' => 0, 'blocked_date'=> now(), 'blocked_by' => @Auth::user()->name]);
+                $student->update(['block_status' => 0]);
+
+                return response()->json(['success' => __('lang.blockstudentSuccess')], 200);
+            }else{
+                $User->update(['block_status' => 1]);
+                $student->update(['block_status' => 1]);
+
+                return response()->json(['success' => __('lang.unblockstudentSuccess')], 200);
+            }
+        }
+    }
+
 }

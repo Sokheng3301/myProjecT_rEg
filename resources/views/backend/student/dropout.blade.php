@@ -55,7 +55,7 @@
     </div> --}}
 
     @section('pageTitle')
-        {{__('lang.Student')}}
+        {{__('lang.DropoutStudent')}}
     @endsection
 
     <div class="app-content">

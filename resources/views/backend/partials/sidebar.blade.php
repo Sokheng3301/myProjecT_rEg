@@ -144,7 +144,7 @@
                         </li>
 
                         <li class="nav-item">
-                        <a href="./layout/layout-rtl.html" class="nav-link">
+                        <a href="{{ route('student-dropout.index') }}" class="nav-link">
                             <i class="nav-icon bi bi-circle"></i>
                             <p> {{ __('lang.studentDropOut') }} </p>
                         </a>

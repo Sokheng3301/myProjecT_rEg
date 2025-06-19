@@ -12,6 +12,7 @@ use App\Http\Controllers\MajorController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\SetlocalizationController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentdropoutController;
 use App\Http\Controllers\TeacherController;
 
 /*
@@ -90,6 +91,14 @@ Route::middleware(['auth', 'lang', 'auto.app'])->group(function () {
         Route::get('student/preview-list/{class_id}', [StudentController::class, 'preview'])->name('student.preview');
         Route::get('student/export-list/{class_id}', [StudentController::class, 'exportList'])->name('student.saveExport');
         Route::get('student/dropout/list', [StudentController::class, 'dropoutList'])->name('student.dropoutList');
+
+        Route::post('student/block/{id}', [StudentController::class, 'block'])->name('student.block');
+        Route::post('student/reset-pass', [StudentController::class, 'resetPass'])->name('student.resetPass');
+        Route::post('student/leave/{id}', [StudentController::class, 'leave'])->name('student.leave');
+
+
+        Route::resource('student-dropout', StudentdropoutController::class)->only('index');
+
 
         // PDF route
         Route::get('student/list/export/pdf', [ExportPDFController::class, 'exportPdf'])->name('pdf.student');

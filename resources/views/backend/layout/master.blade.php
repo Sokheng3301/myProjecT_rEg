@@ -603,9 +603,10 @@
                     }
                 },
                 "order": [[1, 'asc']],
-                "columnDefs": [
-                    { orderable: false, targets: [2, 3, 4, 5, 6] }
-                ]
+                // "columnDefs": [
+                //     { orderable: false, targets: [] }
+                // ]            
+
             });
 
 

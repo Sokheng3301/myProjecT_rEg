@@ -162,38 +162,40 @@
                                 </div>
 
                                 <div class="col-md-12 table-responsive">
-                                    <table class="table table-sm" id="studentStudyHistory">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col"> {{ __('lang.levelClass') }} </th>
-                                                <th scope="col"> {{ __('lang.schoolName') }} </th>
-                                                <th scope="col"> {{ __('lang.province') }} </th>
-                                                <th scope="col"> {{ __('lang.startYear') }} </th>
-                                                <th scope="col"> {{ __('lang.endYear') }} </th>
-                                                <th scope="col"> {{ __('lang.certificateRecieve') }} </th>
-                                                <th scope="col"> {{ __('lang.rank') }} </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if ($student_study_history->isEmpty())
+                                    <div class="myresponsive_table">
+                                        <table class="table table-sm" id="studentStudyHistory">
+                                            <thead>
                                                 <tr>
-                                                    <td colspan="7" class="text-center">{{ __('lang.noDataAvailable') }}</td>
+                                                    <th scope="col"> {{ __('lang.levelClass') }} </th>
+                                                    <th scope="col"> {{ __('lang.schoolName') }} </th>
+                                                    <th scope="col"> {{ __('lang.province') }} </th>
+                                                    <th scope="col"> {{ __('lang.startYear') }} </th>
+                                                    <th scope="col"> {{ __('lang.endYear') }} </th>
+                                                    <th scope="col"> {{ __('lang.certificateRecieve') }} </th>
+                                                    <th scope="col"> {{ __('lang.rank') }} </th>
                                                 </tr>
-                                            @else
-                                                @foreach ($student_study_history as $study)
+                                            </thead>
+                                            <tbody>
+                                                @if ($student_study_history->isEmpty())
                                                     <tr>
-                                                        <td class="field">{{ $study->class_level ?: __('lang.null') }}</td>
-                                                        <td class="field">{{ $study->school_name ?: __('lang.null') }}</td>
-                                                        <td class="field">{{ $study->province ?: __('lang.null') }}</td>
-                                                        <td class="field">{{ $study->start_year ?: __('lang.null') }}</td>
-                                                        <td class="field">{{ $study->end_year ?: __('lang.null') }}</td>
-                                                        <td class="field">{{ $study->certification ?: __('lang.null') }}</td>
-                                                        <td class="field">{{ $study->rank ?: __('lang.null') }}</td>
+                                                        <td colspan="7" class="text-center">{{ __('lang.noDataAvailable') }}</td>
                                                     </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-                                    </table>
+                                                @else
+                                                    @foreach ($student_study_history as $study)
+                                                        <tr>
+                                                            <td class="field">{{ $study->class_level ?: __('lang.null') }}</td>
+                                                            <td class="field">{{ $study->school_name ?: __('lang.null') }}</td>
+                                                            <td class="field">{{ $study->province ?: __('lang.null') }}</td>
+                                                            <td class="field">{{ $study->start_year ?: __('lang.null') }}</td>
+                                                            <td class="field">{{ $study->end_year ?: __('lang.null') }}</td>
+                                                            <td class="field">{{ $study->certification ?: __('lang.null') }}</td>
+                                                            <td class="field">{{ $study->rank ?: __('lang.null') }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
 
 
@@ -255,43 +257,45 @@
                                 </div>
 
 
-                                    <div class="col-md-12 mt-2 table-responsive">
-                                    <table class="table table-sm" id="studentSiblingTable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col"> {{ __('lang.name') }} </th>
-                                                <th scope="col"> {{ __('lang.gender') }} </th>
-                                                <th scope="col"> {{ __('lang.birthDate') }} </th>
-                                                <th scope="col"> {{ __('lang.occupation') }} </th>
-                                                <th scope="col"> {{ __('lang.current_add') }} </th>
-                                                <th scope="col"> {{ __('lang.phone') }} </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if ($student_sibling->isEmpty())
+                                <div class="col-md-12 mt-2 table-responsive">
+                                    <div class="myresponsive_table">
+                                        <table class="table table-sm" id="studentSiblingTable">
+                                            <thead>
                                                 <tr>
-                                                    <td colspan="6" class="text-center">{{ __('lang.noDataAvailable') }}</td>
+                                                    <th scope="col"> {{ __('lang.name') }} </th>
+                                                    <th scope="col"> {{ __('lang.gender') }} </th>
+                                                    <th scope="col"> {{ __('lang.birthDate') }} </th>
+                                                    <th scope="col"> {{ __('lang.occupation') }} </th>
+                                                    <th scope="col"> {{ __('lang.current_add') }} </th>
+                                                    <th scope="col"> {{ __('lang.phone') }} </th>
                                                 </tr>
-                                            @else
-                                                @foreach ($student_sibling as $sibling)
+                                            </thead>
+                                            <tbody>
+                                                @if ($student_sibling->isEmpty())
                                                     <tr>
-                                                        <td>{{$sibling->name ?: __('lang.null')}}</td>
-                                                        <td>{{$sibling->gender ?: __('lang.null')}}</td>
-                                                        <td>
-                                                            @if($sibling->birth_date != null)
-                                                                {{Carbon\Carbon::parse($sibling->birth_date) -> format('d-m-Y') }}
-                                                            @else
-                                                                {{__('lang.null')}}
-                                                            @endif
-                                                        </td>
-                                                        <td>{{$sibling->occupation ?: __('lang.null')}}</td>
-                                                        <td>{{$sibling->current_add ?: __('lang.null')}}</td>
-                                                        <td>{{$sibling->phone ?: __('lang.null')}}</td>
+                                                        <td colspan="6" class="text-center">{{ __('lang.noDataAvailable') }}</td>
                                                     </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-                                    </table>
+                                                @else
+                                                    @foreach ($student_sibling as $sibling)
+                                                        <tr>
+                                                            <td>{{$sibling->name ?: __('lang.null')}}</td>
+                                                            <td>{{$sibling->gender ?: __('lang.null')}}</td>
+                                                            <td>
+                                                                @if($sibling->birth_date != null)
+                                                                    {{Carbon\Carbon::parse($sibling->birth_date) -> format('d-m-Y') }}
+                                                                @else
+                                                                    {{__('lang.null')}}
+                                                                @endif
+                                                            </td>
+                                                            <td>{{$sibling->occupation ?: __('lang.null')}}</td>
+                                                            <td>{{$sibling->current_add ?: __('lang.null')}}</td>
+                                                            <td>{{$sibling->phone ?: __('lang.null')}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

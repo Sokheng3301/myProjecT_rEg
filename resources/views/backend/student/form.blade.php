@@ -244,15 +244,46 @@
                                             </div>
                                         </div>
 
-                                        <div id="class_detail" class="d-none mt-3">
+                                        <div id="class_detail" class="@if(!$update && !$class) d-none @endif mt-3">
                                             <div class="row ui info message">
                                                 <div class="header mb-2">{{__('lang.aboutClass')}}</div>
-                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.classCode')}}</div> <div class="col-1">:</div> <div class="col-7 col-sm-7 col-md-8" id="classCodeValue">  </div>
-                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.department')}}</div> <div class="col-1">:</div> <div class="col-7 col-sm-7 col-md-8" id="departmentValue">  </div>
-                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.major')}}</div> <div class="col-1">:</div> <div class="col-7 col-sm-7 col-md-8" id="majorValue">  </div>
-                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.studyLevel')}}</div> <div class="col-1">:</div> <div class="col-7 col-sm-7 col-md-8" id="studyLevelValue">  </div>
-                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.yearLevel')}}</div> <div class="col-1">:</div> <div class="col-7 col-sm-7 col-md-8" id="yearLevelValue">  </div>
-                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.academicYear')}}</div> <div class="col-1">:</div> <div class="col-7 col-sm-7 col-md-8" id="academyYearValue">  </div>
+                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.classCode')}}</div> <div class="col-1">:</div> <div class="col-7 col-sm-7 col-md-8" id="classCodeValue"> {{ @$class->class_code }}  </div>
+                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.department')}}</div> <div class="col-1">:</div>
+                                                <div class="col-7 col-sm-7 col-md-8" id="departmentValue">
+                                                    @if (session()->has('localization') && session('localization') == 'kh')
+                                                        {{ @$class->majors->departments->dep_name_kh }}
+                                                    @else
+                                                        {{ @$class->majors->departments->dep_name_en }}
+                                                    @endif
+                                                </div>
+                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.major')}}</div> <div class="col-1">:</div>
+                                                <div class="col-7 col-sm-7 col-md-8" id="majorValue">
+                                                    @if (session()->has('localization') && session('localization') == 'kh')
+                                                        {{ @$class->majors->major_name_kh }}
+                                                    @else
+                                                        {{ @$class->majors->major_name_en }}
+                                                    @endif
+                                                </div>
+                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.studyLevel')}}</div> <div class="col-1">:</div>
+                                                <div class="col-7 col-sm-7 col-md-8" id="studyLevelValue">
+                                                    @if ($update && $class)
+                                                        {{ \App\Http\Helpers\AppHelper::studyLevel($class->level_study) }}
+                                                    @endif
+                                                </div>
+                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.yearLevel')}}</div> <div class="col-1">:</div>
+                                                <div class="col-7 col-sm-7 col-md-8" id="yearLevelValue">
+                                                    @if ($update && $class)
+                                                        {{ \App\Http\Helpers\AppHelper::yearLevel($class->year_level) }}
+                                                    @endif
+                                                </div>
+                                                <div class="col-4 col-sm-4 col-md-3 pb-2">{{__('lang.academicYear')}}</div> <div class="col-1">:</div>
+                                                <div class="col-7 col-sm-7 col-md-8" id="academyYearValue">
+                                                    @if ($update && $student->class->academy_year)
+                                                        {{ $student->class->academy_year }}
+                                                    @elseif ($update && $class->academy_year)
+                                                        {{ $class->academy_year }}
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
 
@@ -266,7 +297,7 @@
                                             <div class="col-md-12 mt-3">
                                                 <div class="ui negative message">
                                                     <div class="header">
-                                                        {{ __('lang.messageFromAddTeacher') }}
+                                                        {{ __('lang.messageFromAddStudent') }}
                                                     </div>
                                                     <ul class="list">
                                                         <li> {{ __('lang.checkIDcard') }} </li>
@@ -292,11 +323,16 @@
                                         <div class="col-md-6">
                                             <div class="field">
                                                 <label for="">{{__('lang.birthDate')}}</label>
-                                                <input type="text" name="birth_date"
-                                                    id="datepicker"
-                                                    value="@if($update){{ $student->birth_date ? \Carbon\Carbon::parse($student->birth_date)->format('m/d/Y') : '' }}@else{{ old('birth_date') ? \Carbon\Carbon::pase(old('birth_date'))->formath('m/d/Y') : '' }}@endif"
-                                                    placeholder="{{ __('lang.birthDate') }}">
+                                                <div class="ui icon input">
+
+                                                    <input type="text" name="birth_date"
+                                                        id="datepicker" placeholder="{{ __('lang.m/d/y') }}"
+                                                        value="@if($update){{ $student->birth_date ? \Carbon\Carbon::parse($student->birth_date)->format('m/d/Y') : '' }}@else{{ old('birth_date') ? \Carbon\Carbon::pase(old('birth_date'))->formath('m/d/Y') : '' }}@endif"
+                                                        placeholder="{{ __('lang.birthDate') }}">
+                                                    <i class="bi bi-calendar3 icon"></i>
                                                 </div>
+
+                                            </div>
 
                                             <div class="two fields">
                                                 <div class="field">
@@ -352,189 +388,191 @@
 
                                 {{-- study history  --}}
                                 <div class="col-md-12 table-responsive">
-                                    <table class="table table-sm" id="studentStudyHistory">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col"> {{ __('lang.levelClass') }} </th>
-                                                <th scope="col"> {{ __('lang.schoolName') }} </th>
-                                                <th scope="col"> {{ __('lang.province') }} </th>
-                                                <th scope="col"> {{ __('lang.startYear') }} </th>
-                                                <th scope="col"> {{ __('lang.endYear') }} </th>
-                                                <th scope="col"> {{ __('lang.certificateRecieve') }} </th>
-                                                <th scope="col"> {{ __('lang.rank') }} </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if ($update && $student_study_history->count() > 0)
-                                                {{-- if update and have study history --}}
-                                                @php
-                                                    $i = 1;
-                                                @endphp
-                                                @foreach ($student_study_history as $studyHistory)
-                                                    <tr>
-                                                        <td class="field">
-                                                            <input type="text" name="level_class_{{ $i }}" value="{{ $studyHistory->class_level }}"
-                                                                placeholder="{{ __('lang.levelClass') }}">
-                                                        </td>
-                                                        <td class="field">
-                                                            <input type="text" name="school_name_{{ $i }}" value="{{ $studyHistory->school_name }}"
-                                                                placeholder="{{ __('lang.schoolName') }}">
-                                                        </td>
-                                                        <td class="field">
-                                                            <input type="text"  name="province_{{ $i }}" value="{{ $studyHistory->province }}"
-                                                                placeholder="{{ __('lang.province') }}">
-                                                        </td>
-                                                        <td class="field">
-                                                            <input type="number" min="0" name="start_year_{{ $i }}" value="{{ $studyHistory->start_year }}"
-                                                                placeholder="{{ __('lang.startYear') }}">
-                                                        </td>
-                                                        <td class="field">
-                                                            <input type="number" min="0" name="end_year_{{ $i }}" value="{{ $studyHistory->end_year }}"
-                                                                placeholder="{{ __('lang.endYear') }}">
-                                                        </td>
-                                                        <td class="field">
-                                                            <input type="text" name="certification_{{ $i }}" value="{{ $studyHistory->certification }}"
-                                                                placeholder="{{ __('lang.certificateRecieve') }}">
-                                                        </td>
-                                                        <td class="field">
-                                                            <input type="text" name="rank_{{ $i }}" value="{{ $studyHistory->rank }}"
-                                                                placeholder="{{ __('lang.rank') }}">
-                                                        </td>
-                                                    </tr>
+                                    <div class="myresponsive_table">
+                                        <table class="table table-sm" id="studentStudyHistory">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"> {{ __('lang.levelClass') }} </th>
+                                                    <th scope="col"> {{ __('lang.schoolName') }} </th>
+                                                    <th scope="col"> {{ __('lang.province') }} </th>
+                                                    <th scope="col"> {{ __('lang.startYear') }} </th>
+                                                    <th scope="col"> {{ __('lang.endYear') }} </th>
+                                                    <th scope="col"> {{ __('lang.certificateRecieve') }} </th>
+                                                    <th scope="col"> {{ __('lang.rank') }} </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if ($update && $student_study_history->count() > 0)
+                                                    {{-- if update and have study history --}}
                                                     @php
-                                                        $i++;
+                                                        $i = 1;
                                                     @endphp
-                                                @endforeach
+                                                    @foreach ($student_study_history as $studyHistory)
+                                                        <tr>
+                                                            <td class="field">
+                                                                <input type="text" name="level_class_{{ $i }}" value="{{ $studyHistory->class_level }}"
+                                                                    placeholder="{{ __('lang.levelClass') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="school_name_{{ $i }}" value="{{ $studyHistory->school_name }}"
+                                                                    placeholder="{{ __('lang.schoolName') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text"  name="province_{{ $i }}" value="{{ $studyHistory->province }}"
+                                                                    placeholder="{{ __('lang.province') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="number" min="0" name="start_year_{{ $i }}" value="{{ $studyHistory->start_year }}"
+                                                                    placeholder="{{ __('lang.startYear') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="number" min="0" name="end_year_{{ $i }}" value="{{ $studyHistory->end_year }}"
+                                                                    placeholder="{{ __('lang.endYear') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="certification_{{ $i }}" value="{{ $studyHistory->certification }}"
+                                                                    placeholder="{{ __('lang.certificateRecieve') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="rank_{{ $i }}" value="{{ $studyHistory->rank }}"
+                                                                    placeholder="{{ __('lang.rank') }}">
+                                                            </td>
+                                                        </tr>
+                                                        @php
+                                                            $i++;
+                                                        @endphp
+                                                    @endforeach
 
-                                            @elseif (old('student_study_history_count_tr'))
-                                                @for ($i = 1; $i <= old('student_study_history_count_tr'); $i++)
+                                                @elseif (old('student_study_history_count_tr'))
+                                                    @for ($i = 1; $i <= old('student_study_history_count_tr'); $i++)
+                                                        <tr>
+                                                            <td class="field">
+                                                                <input type="text" name="level_class_{{ $i }}" value="{{ old('level_class_'.$i) }}"
+                                                                    placeholder="{{ __('lang.levelClass') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="school_name_{{ $i }}" value="{{ old('school_name_'.$i) }}"
+                                                                    placeholder="{{ __('lang.schoolName') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text"  name="province_{{ $i }}" value="{{ old('province_'.$i) }}"
+                                                                    placeholder="{{ __('lang.province') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="number" min="0" name="start_year_{{ $i }}" value="{{ old('start_year_'.$i) }}"
+                                                                    placeholder="{{ __('lang.startYear') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="number" min="0" name="end_year_{{ $i }}" value="{{ old('end_year_'.$i) }}"
+                                                                    placeholder="{{ __('lang.endYear') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="certification_{{ $i }}" value="{{ old('certification_'.$i) }}"
+                                                                    placeholder="{{ __('lang.certificateRecieve') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="rank_{{ $i }}" value="{{ old('rank_'.$i) }}"
+                                                                    placeholder="{{ __('lang.rank') }}">
+                                                            </td>
+                                                        </tr>
+                                                    @endfor
+                                                @else
                                                     <tr>
                                                         <td class="field">
-                                                            <input type="text" name="level_class_{{ $i }}" value="{{ old('level_class_'.$i) }}"
+                                                            <input type="text" name="level_class_1"
                                                                 placeholder="{{ __('lang.levelClass') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text" name="school_name_{{ $i }}" value="{{ old('school_name_'.$i) }}"
+                                                            <input type="text" name="school_name_1"
                                                                 placeholder="{{ __('lang.schoolName') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text"  name="province_{{ $i }}" value="{{ old('province_'.$i) }}"
+                                                            <input type="text"  name="province_1"
                                                                 placeholder="{{ __('lang.province') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="number" min="0" name="start_year_{{ $i }}" value="{{ old('start_year_'.$i) }}"
+                                                            <input type="number" min="0" name="start_year_1"
                                                                 placeholder="{{ __('lang.startYear') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="number" min="0" name="end_year_{{ $i }}" value="{{ old('end_year_'.$i) }}"
+                                                            <input type="number" min="0" name="end_year_1"
                                                                 placeholder="{{ __('lang.endYear') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text" name="certification_{{ $i }}" value="{{ old('certification_'.$i) }}"
+                                                            <input type="text" name="certification_1"
                                                                 placeholder="{{ __('lang.certificateRecieve') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text" name="rank_{{ $i }}" value="{{ old('rank_'.$i) }}"
+                                                            <input type="text" name="rank_1"
                                                                 placeholder="{{ __('lang.rank') }}">
                                                         </td>
                                                     </tr>
-                                                @endfor
-                                            @else
-                                                <tr>
-                                                    <td class="field">
-                                                        <input type="text" name="level_class_1"
-                                                            placeholder="{{ __('lang.levelClass') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="school_name_1"
-                                                            placeholder="{{ __('lang.schoolName') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text"  name="province_1"
-                                                            placeholder="{{ __('lang.province') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="number" min="0" name="start_year_1"
-                                                            placeholder="{{ __('lang.startYear') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="number" min="0" name="end_year_1"
-                                                            placeholder="{{ __('lang.endYear') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="certification_1"
-                                                            placeholder="{{ __('lang.certificateRecieve') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="rank_1"
-                                                            placeholder="{{ __('lang.rank') }}">
-                                                    </td>
-                                                </tr>
 
-                                                <tr>
-                                                    <td class="field">
-                                                        <input type="text" name="level_class_2"
-                                                            placeholder="{{ __('lang.levelClass') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="school_name_2"
-                                                            placeholder="{{ __('lang.schoolName') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text"  name="province_2"
-                                                            placeholder="{{ __('lang.province') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="number" min="0" name="start_year_2"
-                                                            placeholder="{{ __('lang.startYear') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="number" min="0" name="end_year_2"
-                                                            placeholder="{{ __('lang.endYear') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="certification_2"
-                                                            placeholder="{{ __('lang.certificateRecieve') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="rank_2"
-                                                            placeholder="{{ __('lang.rank') }}">
-                                                    </td>
-                                                </tr>
+                                                    <tr>
+                                                        <td class="field">
+                                                            <input type="text" name="level_class_2"
+                                                                placeholder="{{ __('lang.levelClass') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="school_name_2"
+                                                                placeholder="{{ __('lang.schoolName') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text"  name="province_2"
+                                                                placeholder="{{ __('lang.province') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="number" min="0" name="start_year_2"
+                                                                placeholder="{{ __('lang.startYear') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="number" min="0" name="end_year_2"
+                                                                placeholder="{{ __('lang.endYear') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="certification_2"
+                                                                placeholder="{{ __('lang.certificateRecieve') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="rank_2"
+                                                                placeholder="{{ __('lang.rank') }}">
+                                                        </td>
+                                                    </tr>
 
-                                                <tr>
-                                                    <td class="field">
-                                                        <input type="text" name="level_class_3"
-                                                            placeholder="{{ __('lang.levelClass') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="school_name_3"
-                                                            placeholder="{{ __('lang.schoolName') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text"  name="province_3"
-                                                            placeholder="{{ __('lang.province') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="number" min="0" name="start_year_3"
-                                                            placeholder="{{ __('lang.startYear') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="number" min="0" name="end_year_3"
-                                                            placeholder="{{ __('lang.endYear') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="certification_3"
-                                                            placeholder="{{ __('lang.certificateRecieve') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="rank_3"
-                                                            placeholder="{{ __('lang.rank') }}">
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        </tbody>
-                                    </table>
+                                                    <tr>
+                                                        <td class="field">
+                                                            <input type="text" name="level_class_3"
+                                                                placeholder="{{ __('lang.levelClass') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="school_name_3"
+                                                                placeholder="{{ __('lang.schoolName') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text"  name="province_3"
+                                                                placeholder="{{ __('lang.province') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="number" min="0" name="start_year_3"
+                                                                placeholder="{{ __('lang.startYear') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="number" min="0" name="end_year_3"
+                                                                placeholder="{{ __('lang.endYear') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="certification_3"
+                                                                placeholder="{{ __('lang.certificateRecieve') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="rank_3"
+                                                                placeholder="{{ __('lang.rank') }}">
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
 
                                     <div class="two wide field ui mini action input mb-3">
                                         <input type="number" id="studentStudyHistoryAddrowValue" value="1"
@@ -558,28 +596,33 @@
                                             <h4 class="my-3"> <i class="bi bi-dot text-danger"></i> {{__('lang.aboutFather')}}</h4>
                                             <div class="field">
                                                 <label for="">{{__('lang.fatherName')}}</label>
-                                                <input type="text" name="father_name" placeholder="{{ __('lang.fatherName') }}" value="{{ old('father_name') }}">
+                                                <input type="text" name="father_name"
+                                                placeholder="{{ __('lang.fatherName') }}"
+                                                value="@if($update){{ $student->father_name }}@else{{ old('father_name') }}@endif">
                                             </div>
                                             <div class="field">
                                                 <label for="">{{__('lang.age')}}</label>
                                                 <div class="ui right labeled input">
-                                                    <input type="number" min="0" name="father_age" placeholder="{{ __('lang.age') }}" value="{{ old('father_age') }}">
+                                                    <input type="number" min="0" name="father_age" placeholder="{{ __('lang.age') }}"
+                                                    value="@if($update){{ $student->father_age }}@else{{ old('father_age') }}@endif">
                                                     <div class="ui label">{{__('lang.year')}}</div>
                                                 </div>
                                             </div>
                                             <div class="field">
                                                 <label for="">{{__('lang.occupation')}}</label>
-                                                <input type="text" name="father_occupation" placeholder="{{ __('lang.occupation') }}" value="{{ old('father_occupation') }}">
+                                                <input type="text" name="father_occupation" placeholder="{{ __('lang.occupation') }}"
+                                                value="@if($update){{ $student->father_occupation }}@else{{ old('father_occupation') }}@endif">
                                             </div>
 
                                             <div class="field">
                                                 <label for="">{{__('lang.phone')}}</label>
-                                                <input type="text" name="father_phone" placeholder="{{ __('lang.phone') }}" value="{{ old('father_phone') }}">
+                                                <input type="text" name="father_phone" placeholder="{{ __('lang.phone') }}"
+                                                value="@if($update){{ $student->father_phone }}@else{{ old('father_phone') }}@endif">
                                             </div>
 
                                             <div class="field">
                                                 <label for="">{{__('lang.current_add')}}</label>
-                                                <textarea name="father_current_add" id="" cols="30" rows="4" placeholder="{{ __('lang.current_add') }}">{{old('father_current_add')}}</textarea>
+                                                <textarea name="father_current_add" id="" cols="30" rows="4" placeholder="{{ __('lang.current_add') }}">@if($update){{$student->father_add}}@else{{old('father_current_add')}}@endif</textarea>
                                             </div>
 
                                         </div>
@@ -587,28 +630,32 @@
                                             <h4 class="my-3"> <i class="bi bi-dot text-danger"></i> {{__('lang.aboutMother')}}</h4>
                                             <div class="field">
                                                 <label for="">{{__('lang.motherName')}}</label>
-                                                <input type="text" name="mother_name" placeholder="{{ __('lang.motherName') }}" value="{{ old('motherName') }}">
+                                                <input type="text" name="mother_name" placeholder="{{ __('lang.motherName') }}"
+                                                value="@if($update){{ $student->mother_name }}@else{{ old('mother_name') }}@endif">
                                             </div>
                                             <div class="field">
                                                 <label for="">{{__('lang.age')}}</label>
                                                 <div class="ui right labeled input">
-                                                    <input type="number" min="0" name="mother_age" placeholder="{{ __('lang.age') }}" value="{{ old('mother_age') }}">
+                                                    <input type="number" min="0" name="mother_age" placeholder="{{ __('lang.age') }}"
+                                                    value="@if($update){{ $student->mother_age }}@else{{ old('mother_age') }}@endif">
                                                     <div class="ui label">{{__('lang.year')}}</div>
                                                 </div>
                                             </div>
                                             <div class="field">
                                                 <label for="">{{__('lang.occupation')}}</label>
-                                                <input type="text" name="mother_occupation" placeholder="{{ __('lang.occupation') }}" value="{{ old('mother_occupation') }}">
+                                                <input type="text" name="mother_occupation" placeholder="{{ __('lang.occupation') }}"
+                                                 value="@if($update){{ $student->mother_occupation }}@else{{ old('mother_occupation') }}@endif">
                                             </div>
 
                                             <div class="field">
                                                 <label for="">{{__('lang.phone')}}</label>
-                                                <input type="text" name="mother_phone" placeholder="{{ __('lang.phone') }}" value="{{ old('mother_phone') }}">
+                                                <input type="text" name="mother_phone" placeholder="{{ __('lang.phone') }}"
+                                                value="@if($update){{ $student->mother_phone }}@else{{ old('mother_phone') }}@endif">
                                             </div>
 
                                             <div class="field">
                                                 <label for="">{{__('lang.current_add')}}</label>
-                                                <textarea name="mother_current_add" id="" cols="30" rows="4" placeholder="{{ __('lang.current_add') }}">{{old('mother_current_add')}}</textarea>
+                                                <textarea name="mother_current_add" id="" cols="30" rows="4" placeholder="{{ __('lang.current_add') }}">@if($update){{$student->mother_add}}@else{{old('mother_current_add')}}@endif</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -619,7 +666,9 @@
                                             <div class="field">
                                                 <label for="">{{__('lang.totalSibling')}}</label>
                                                 <div class="ui right labeled input">
-                                                    <input type="number" min="0" name="sibling" value="{{ old('sibling') }}" placeholder="{{ __('lang.totalSibling') }}">
+                                                    <input type="number" min="0" name="sibling"
+                                                    value="@if($update){{ $student->sibling }}@else{{ old('sibling') }}@endif"
+                                                    placeholder="{{ __('lang.totalSibling') }}">
                                                     <div class="ui label">{{__('lang.person')}}</div>
                                                 </div>
                                             </div>
@@ -628,7 +677,9 @@
                                             <div class="field">
                                                 <label for="">{{__('lang.femaleMemeber')}}</label>
                                                 <div class="ui right labeled input">
-                                                    <input type="number" min="0" name="female_sibling" value="{{ old('female_sibling') }}" placeholder="{{ __('lang.femaleMemeber') }}">
+                                                    <input type="number" min="0" name="female_sibling"
+                                                    value="@if($update){{ $student->female_sibling}}@else{{ old('female_sibling') }}@endif"
+                                                    placeholder="{{ __('lang.femaleMemeber') }}">
                                                     <div class="ui label">{{__('lang.person')}}</div>
                                                 </div>
                                             </div>
@@ -638,160 +689,185 @@
 
 
                                 <div class="col-md-12 mt-3 table-responsive">
-                                    <table class="table table-sm" id="studentSiblingTable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col"> {{ __('lang.name') }} </th>
-                                                <th scope="col"> {{ __('lang.gender') }} </th>
-                                                <th scope="col"> {{ __('lang.birthDate') }} </th>
-                                                <th scope="col"> {{ __('lang.occupation') }} </th>
-                                                <th scope="col"> {{ __('lang.current_add') }} </th>
-                                                <th scope="col"> {{ __('lang.phone') }} </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if ($update)
-                                                @php
-                                                    $increment = 1;
-                                                @endphp
-                                                @foreach ($student_sibling as $studnetSibling)
-                                                    <tr>
-                                                        <td class="field">
-                                                            <input type="text" name="name_{{ $increment }}" value="{{ $studnetSibling->name }}"
-                                                                placeholder="{{ __('lang.name') }}">
-                                                        </td>
-                                                        <td class="field">
-                                                            <input type="text" name="gender_{{ $increment }}" value="{{ $studnetSibling->gender }}"
-                                                                placeholder="{{ __('lang.gender') }}">
-                                                        </td>
-                                                        <td class="field">
-                                                            <input type="text"  name="birth_date_{{ $increment }}" id="birth_date{{ $increment }}" value="{{ $studnetSibling->birth_date ? \Carbon\Carbon::parse($studnetSibling->birth_date)->format('d/m/Y') : '' }}"
-                                                                placeholder="{{ __('lang.birthDate') }}">
-                                                        </td>
-                                                        <td class="field">
-                                                            <input type="text" name="occupation_{{ $increment }}" value="{{ $studnetSibling->occupation }}"
-                                                                placeholder="{{ __('lang.occupation') }}">
-                                                        </td>
-                                                        <td class="field">
-                                                            <input type="text" name="current_add_{{ $increment }}" placeholder="{{ __('lang.current_add') }}" value="{{ $studnetSibling->current_add }}">
-                                                        </td>
-                                                        <td class="field">
-                                                            <input type="text" name="phone_{{ $increment }}" value="{{ $studnetSibling->phone }}"
-                                                                placeholder="{{ __('lang.phone') }}">
-                                                        </td>
-                                                    </tr>
+                                    <div class="myresponsive_table">
+                                        <table class="table table-sm" id="studentSiblingTable">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"> {{ __('lang.name') }} </th>
+                                                    <th scope="col"> {{ __('lang.gender') }} </th>
+                                                    <th scope="col"> {{ __('lang.birthDate') }} </th>
+                                                    <th scope="col"> {{ __('lang.occupation') }} </th>
+                                                    <th scope="col"> {{ __('lang.current_add') }} </th>
+                                                    <th scope="col"> {{ __('lang.phone') }} </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if ($update && $student_sibling->count() > 0)
+                                                    {{-- if update and have sibling --}}
                                                     @php
-                                                        $increment++;
+                                                        $increment = 1;
                                                     @endphp
-                                                @endforeach
 
-                                            @elseif (old('student_sibling_count_tr'))
-                                                @for ($i = 1; $i <= old('student_sibling_count_tr'); $i++)
+                                                    @foreach ($student_sibling as $studnetSibling)
+                                                        <tr>
+                                                            <td class="field">
+                                                                <input type="text" name="name_{{ $increment }}" value="{{ $studnetSibling->name }}"
+                                                                    placeholder="{{ __('lang.name') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="gender_{{ $increment }}" value="{{ $studnetSibling->gender }}"
+                                                                    placeholder="{{ __('lang.gender') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <div class="ui icon input">
+                                                                    <input type="text"  name="birth_date_{{ $increment }}" id="birth_date{{ $increment }}" value="{{ $studnetSibling->birth_date ? \Carbon\Carbon::parse($studnetSibling->birth_date)->format('m/d/Y') : '' }}"
+                                                                        placeholder="{{ __('lang.m/d/y') }}">
+                                                                    <i class="bi bi-calendar3 icon"></i>
+                                                                </div>
+
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="occupation_{{ $increment }}" value="{{ $studnetSibling->occupation }}"
+                                                                    placeholder="{{ __('lang.occupation') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="current_add_{{ $increment }}" placeholder="{{ __('lang.current_add') }}" value="{{ $studnetSibling->current_add }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="phone_{{ $increment }}" value="{{ $studnetSibling->phone }}"
+                                                                    placeholder="{{ __('lang.phone') }}">
+                                                            </td>
+                                                        </tr>
+                                                        @php
+                                                            $increment++;
+                                                        @endphp
+                                                    @endforeach
+
+                                                @elseif (old('student_sibling_count_tr'))
+                                                    {{-- if update and have sibling --}}
+                                                    @for ($i = 1; $i <= old('student_sibling_count_tr'); $i++)
+                                                        <tr>
+                                                            <td class="field">
+                                                                <input type="text" name="name_{{ $i }}" value="{{ old('name_'. $i) }}"
+                                                                    placeholder="{{ __('lang.name') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="gender_{{ $i }}" value="{{ old('gender_'. $i) }}"
+                                                                    placeholder="{{ __('lang.gender') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <div class="ui icon input">
+
+                                                                    <input type="text"  name="birth_date_{{ $i }}" id="birth_date{{ $i }}" value="{{ old('birth_date_'. $i ) ? \Carbon\Carbon::pase(old('birth_date_'. $i)) : '' }}"
+                                                                        placeholder="{{ __('lang.m/d/y') }}">
+                                                                    <i class="bi bi-calendar3 icon"></i>
+                                                                </div>
+
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="occupation_{{ $i }}" value="{{ old('occupation_'. $i) }}"
+                                                                    placeholder="{{ __('lang.occupation') }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="current_add_{{ $i }}" placeholder="{{ __('lang.current_add') }}" value="{{ old('current_add_'. $i) }}">
+                                                            </td>
+                                                            <td class="field">
+                                                                <input type="text" name="phone_{{ $i }}" value="{{ old('phone_'. $i) }}"
+                                                                    placeholder="{{ __('lang.phone') }}">
+                                                            </td>
+                                                        </tr>
+                                                    @endfor
+                                                @else
                                                     <tr>
                                                         <td class="field">
-                                                            <input type="text" name="name_{{ $i }}" value="{{ old('name_'. $i) }}"
+                                                            <input type="text" name="name_1"
                                                                 placeholder="{{ __('lang.name') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text" name="gender_{{ $i }}" value="{{ old('gender_'. $i) }}"
+                                                            <input type="text" name="gender_1"
                                                                 placeholder="{{ __('lang.gender') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text"  name="birth_date_{{ $i }}" id="birth_date{{ $i }}" value="{{ old('birth_date_'. $i ) ? \Carbon\Carbon::pase(old('birth_date_'. $i)) : '' }}"
-                                                                placeholder="{{ __('lang.birthDate') }}">
+                                                            <div class="ui icon input">
+                                                                <input type="text"  name="birth_date_1" id="birth_date1"
+                                                                    placeholder="{{ __('lang.m/d/y') }}">
+                                                                <i class="bi bi-calendar3 icon"></i>
+                                                            </div>
+
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text" name="occupation_{{ $i }}" value="{{ old('occupation_'. $i) }}"
+                                                            <input type="text" name="occupation_1"
                                                                 placeholder="{{ __('lang.occupation') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text" name="current_add_{{ $i }}" placeholder="{{ __('lang.current_add') }}" value="{{ old('current_add_'. $i) }}">
+                                                            <input type="text" name="current_add_1" placeholder="{{ __('lang.current_add') }}">
                                                         </td>
                                                         <td class="field">
-                                                            <input type="text" name="phone_{{ $i }}" value="{{ old('phone_'. $i) }}"
+                                                            <input type="text" name="phone_1"
                                                                 placeholder="{{ __('lang.phone') }}">
                                                         </td>
                                                     </tr>
-                                                @endfor
-                                            @else
-                                                <tr>
-                                                    <td class="field">
-                                                        <input type="text" name="name_1"
-                                                            placeholder="{{ __('lang.name') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="gender_1"
-                                                            placeholder="{{ __('lang.gender') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text"  name="birth_date_1" id="birth_date1"
-                                                            placeholder="{{ __('lang.birthDate') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="occupation_1"
-                                                            placeholder="{{ __('lang.occupation') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="current_add_1" placeholder="{{ __('lang.current_add') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="phone_1"
-                                                            placeholder="{{ __('lang.phone') }}">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="field">
-                                                        <input type="text" name="name_2"
-                                                            placeholder="{{ __('lang.name') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="gender_2"
-                                                            placeholder="{{ __('lang.gender') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text"  name="birth_date_2" id="birth_date2"
-                                                            placeholder="{{ __('lang.birthDate') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="occupation_2"
-                                                            placeholder="{{ __('lang.occupation') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="current_add_2" placeholder="{{ __('lang.current_add') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="phone_2"
-                                                            placeholder="{{ __('lang.phone') }}">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="field">
-                                                        <input type="text" name="name_3"
-                                                            placeholder="{{ __('lang.name') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="gender_3"
-                                                            placeholder="{{ __('lang.gender') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text"  name="birth_date_3" id="birth_date3"
-                                                            placeholder="{{ __('lang.birthDate') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="occupation_3"
-                                                            placeholder="{{ __('lang.occupation') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="current_add_3" placeholder="{{ __('lang.current_add') }}">
-                                                    </td>
-                                                    <td class="field">
-                                                        <input type="text" name="phone_3"
-                                                            placeholder="{{ __('lang.phone') }}">
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        </tbody>
-                                    </table>
+                                                    <tr>
+                                                        <td class="field">
+                                                            <input type="text" name="name_2"
+                                                                placeholder="{{ __('lang.name') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="gender_2"
+                                                                placeholder="{{ __('lang.gender') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <div class="ui icon input">
+                                                                <input type="text"  name="birth_date_2" id="birth_date2"
+                                                                    placeholder="{{ __('lang.m/d/y') }}">
+                                                                <i class="bi bi-calendar3 icon"></i>
+                                                            </div>
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="occupation_2"
+                                                                placeholder="{{ __('lang.occupation') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="current_add_2" placeholder="{{ __('lang.current_add') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="phone_2"
+                                                                placeholder="{{ __('lang.phone') }}">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="field">
+                                                            <input type="text" name="name_3"
+                                                                placeholder="{{ __('lang.name') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="gender_3"
+                                                                placeholder="{{ __('lang.gender') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <div class="ui icon input">
+                                                                <input type="text"  name="birth_date_3" id="birth_date3"
+                                                                    placeholder="{{ __('lang.m/d/y') }}">
+                                                                <i class="bi bi-calendar3 icon"></i>
+                                                            </div>
+                                                        </td>
+
+                                                        <td class="field">
+                                                            <input type="text" name="occupation_3"
+                                                                placeholder="{{ __('lang.occupation') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="current_add_3" placeholder="{{ __('lang.current_add') }}">
+                                                        </td>
+                                                        <td class="field">
+                                                            <input type="text" name="phone_3"
+                                                                placeholder="{{ __('lang.phone') }}">
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
 
                                     <div class="two wide field ui mini action input mb-3">
                                         <input type="number" id="studentSiblingTableAddrowValue" value="1"
@@ -1019,8 +1095,11 @@
                                         placeholder="{{ __('lang.gender') }}">
                                 </td>
                                 <td class="field">
-                                    <input type="text"  name="birth_date_${threeIncrement}" id="birth_date_${threeIncrement}"
-                                        placeholder="{{ __('lang.birthDate') }}">
+                                    <div class="ui icon input">
+                                        <input type="text"  name="birth_date_${threeIncrement}" id="birth_date_${threeIncrement}"
+                                            placeholder="{{ __('lang.m/d/y') }}">
+                                        <i class="bi bi-calendar3 icon"></i>
+                                    <div>
                                 </td>
                                 <td class="field">
                                     <input type="text" name="occupation_${threeIncrement}"
