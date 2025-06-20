@@ -23,5 +23,10 @@ class Department extends Model
         'delete_status' => 'integer',
     ];
 
-    // public function 
+    // public function courses()
+    // {
+    //     return $this->hasMany(Course::class, 'department_id');
+    // }
+
+    // public function
 }

@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Helpers;
 
+use COM;
+
 class AppHelper
 {
     // Existing constants and methods...
@@ -50,4 +52,31 @@ class AppHelper
         // Check if the level exists in the YEAR_LEVEL array
         return isset(self::YEAR_LEVEL[$level]) ? __('lang.' . self::YEAR_LEVEL[$level]) : __('lang.null');
     }
+
+    const COURSE_TYPE_1 = 1;
+    const COURSE_TYPE_2 = 2;
+    const COURSE_TYPE_3 = 3;
+    const COURSE_TYPE_4 = 4;
+    const COURSE_TYPE_5 = 5;
+    const COURSE_TYPE_6 = 6;
+    const COURSE_TYPE = [
+        self::COURSE_TYPE_1 => 'GeneralEducation',
+        self::COURSE_TYPE_2 => 'BasicOrFoundationalSubjectGroupsOfSpecialization',
+        self::COURSE_TYPE_3 => 'BasicCoreSubjectGroupOrCoreSubjectGroupOfSpecialization',
+        self::COURSE_TYPE_4 => 'BasicElectiveSubjectsOrSpecializedElectiveSubjects',
+        self::COURSE_TYPE_5 => 'Project',
+        self::COURSE_TYPE_6 => 'Internship',
+    ];
+    public static function getCourseType()
+    {
+        return array_map(function($key) {
+            return __('lang.' . $key);
+        }, self::COURSE_TYPE);
+    }
+    public static function courseType($type)
+    {
+        // Check if the type exists in the COURSE_TYPE array
+        return isset(self::COURSE_TYPE[$type]) ? __('lang.' . self::COURSE_TYPE[$type]) : __('lang.null');
+    }
+
 }

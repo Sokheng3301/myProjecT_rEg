@@ -1,19 +1,21 @@
 <?php
 
-use App\Http\Controllers\ClassController;
-use App\Http\Controllers\ClassrommController;
+use App\Models\Course;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\ExportPDFController;
+use App\Http\Controllers\ClassController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\MajorController;
-use App\Http\Controllers\SemesterController;
-use App\Http\Controllers\SetlocalizationController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
-use App\Http\Controllers\StudentdropoutController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\SemesterController;
+use App\Http\Controllers\ClassrommController;
+use App\Http\Controllers\ExportPDFController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\StudentdropoutController;
+use App\Http\Controllers\SetlocalizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,13 +97,14 @@ Route::middleware(['auth', 'lang', 'auto.app'])->group(function () {
         Route::post('student/block/{id}', [StudentController::class, 'block'])->name('student.block');
         Route::post('student/reset-pass', [StudentController::class, 'resetPass'])->name('student.resetPass');
         Route::post('student/leave/{id}', [StudentController::class, 'leave'])->name('student.leave');
-
-
         Route::resource('student-dropout', StudentdropoutController::class)->only('index');
-
 
         // PDF route
         Route::get('student/list/export/pdf', [ExportPDFController::class, 'exportPdf'])->name('pdf.student');
+
+
+        //course route
+        Route::resource('course', CourseController::class);
 });
 
 

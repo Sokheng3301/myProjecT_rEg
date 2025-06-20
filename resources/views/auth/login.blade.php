@@ -68,7 +68,7 @@
 <body>
     <div id="bg-login">
         <div class="overlay">
-            <div class="bg-form col-9 col-sm-6 col-md-5 col-lg-4 col-xl-3 shadow-lg">
+            <div class="bg-form col-11 col-sm-6 col-md-5 col-lg-4 col-xl-3 shadow-lg">
                 <div class="col-md-12 part">
                     <img class="ui image tiny mx-auto d-block" src="{{ asset('dist/assets/img/logo-bran.png') }}" alt="" width="15%">
                     <h2 class="text-center ui medium header">{{__("lang.ims")}}</h2>
@@ -189,6 +189,18 @@
                 }
             });
         });
+
+        $('form').submit(function() {
+            var submitButton = $('button[type="submit"]');
+            submitButton.prop('disabled', true);
+            submitButton.addClass('loading');
+
+            setTimeout(function() {
+                submitButton.prop('disabled', false);
+                submitButton.removeClass('loading');
+            }, 3000);
+        });
+
     </script>
 </body>
 </html>

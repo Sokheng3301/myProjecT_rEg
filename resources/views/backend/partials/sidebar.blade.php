@@ -160,7 +160,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('home') }}" class="nav-link">
+                    <a href="{{ route('course.index') }}" class="nav-link">
                         <i class="nav-icon bi bi-list-stars"></i>
                         <p>
                         {{ __('lang.courseManagement') }}
