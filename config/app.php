@@ -172,6 +172,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         //add new here
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        
     ])->toArray(),
 
     /*

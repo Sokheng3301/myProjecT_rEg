@@ -91,6 +91,7 @@
                         </div>
                     </div>
                 </div>
+                {!! @$qrCode !!}
             </div>
         </div>
     </div>

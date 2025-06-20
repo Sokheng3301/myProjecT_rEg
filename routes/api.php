@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\ApiQRcodeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+$hasUrl = bcrypt(date('d-m-Y H:m:i'));
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Route::get('ksit/qrcode/'.$hasUrl.'{id}', [ApiQRcodeController::class, 'index'])->name('api.generateqr');
+Route::get('ksit/qrcode/{id}', [ApiQRcodeController::class, 'index'])->name('api.generateqr');

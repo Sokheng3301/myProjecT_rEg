@@ -95,9 +95,7 @@
                                                         @if ($d->id == $major->department_id)
                                                             selected
                                                         @endif
-                                                    @endif
-
-                                                >
+                                                    @endif>
                                                     {{ $d->dep_code }} -
                                                     @if (session()->has('localization') && session('localization') == 'en')
                                                     {{ $d->dep_name_en }}

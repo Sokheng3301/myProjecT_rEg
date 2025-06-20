@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Department;
+use App\Models\Year;
 use App\Models\Major;
 use App\Models\Student;
+use App\Models\Department;
 use App\Models\Studentclass;
-use App\Models\Year;
 use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
+// use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Response\QrCodeResponse;
+
+use function PHPUnit\Framework\returnSelf;
 
 class QRCodeController extends Controller
 {
@@ -38,7 +44,30 @@ class QRCodeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd('hi QR');
+    }
+
+    ///Generate QR code
+
+    public function generate(string $id){
+        // dd('Generate');
+        // dd($id);
+        $url = route('api.generateqr', $id);
+        // dd($url);
+        // $qrCode = QrCode::format('png')
+        //                  ->merge(public_path('dist/assets/img/logo-bran.png'), 0.5, true)
+        //                  ->size(500)
+        //                  ->errorCorrection('H')
+        //                  ->generate($url);
+
+
+        // return response($image)->header('Content-type','image/png');
+        $qrCode = QrCode::size(300)->generate($url);
+        // update qrcode
+        Student::where('id', $id)->update(['qrcode'=> $qrCode]);
+        // returnSelf();
+        return redirect()->back()->with('success', __("lang.generateQrcodeSuccess"));
+
     }
 
     /**
@@ -71,5 +100,22 @@ class QRCodeController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function download(string $id){
+        $student = Student::findOrFail($id);
+        // dd($student);
+        $text = ''; // Get the text from the student object
+
+        // Generate QR code
+        $qrCode = QrCode::size(300)
+                    // ->errorCorrection('L') // Set to 'L' for low error correction
+                    ->generate($text);
+
+
+        // Create a response to download the image
+        return response($qrCode)
+            ->header('Content-Type', 'image/png')
+            ->header('Content-Disposition', 'attachment; filename="qrcode.png"');
     }
 }

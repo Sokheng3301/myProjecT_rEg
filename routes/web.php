@@ -107,6 +107,8 @@ Route::middleware(['auth', 'lang', 'auto.app'])->group(function () {
         Route::resource('course', CourseController::class);
         //Qr Code route
         Route::resource('qrcode', QRCodeController::class);
+        Route::get('qrcode/generate/new/{id}', [QRCodeController::class, 'generate'])->name('qrcode.generate');
+        Route::get('download/qrcode/{id}', [QRCodeController::class, 'download'])->name('qrcode.download');
 });
 
 

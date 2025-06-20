@@ -8,6 +8,7 @@
         "php": "^8.1",
         "barryvdh/laravel-dompdf": "*",
         "dompdf/dompdf": "^3.1",
+        "endroid/qr-code": "^5.0",
         "guzzlehttp/guzzle": "^7.2",
         "khmer-pdf/laravel-kh-pdf": "*",
         "laravel/framework": "^10.10",
@@ -15,6 +16,7 @@
         "laravel/tinker": "^2.8",
         "maatwebsite/excel": "3.1.62",
         "mpdf/mpdf": "^8.2",
+        "simplesoftwareio/simple-qrcode": "4.2.0",
         "tecnickcom/tcpdf": "^6.10"
     },
     "require-dev": {

@@ -616,7 +616,11 @@ return[
     'totalStudent' => 'និស្សិតសរុប',
     'femaleStudent' => 'និស្សិតស្រី',
     'qrCode' => 'កូដ QR',
+    'studentQrCode' => 'កូដ QR របស់និស្សិត',
     'readQrcode' => 'អានកូដ QR',
     'generate' => 'បង្កើត',
-    
+    'qrcodeWillGenerateAndShowhere' => 'កូដ QR នឹងត្រូវបង្កើតនៅកន្លែងនេះហើយបង្ហាញលទ្ធផលនៅខាងក្រោម',
+    'downloadQrcode' => 'ទាញយកកូដ QR',
+    'generateQrcodeSuccess' => 'បង្កើតកូដ QR បានជោគជ័យ',
+    'studentQrCodeShowhere' => 'កូដ QR របស់និស្សិតត្រូវបានបង្ហាញនៅខាងក្រោម',
 ];
