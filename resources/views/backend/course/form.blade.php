@@ -165,12 +165,14 @@
                                             </div>
                                         </div>
 
-                                        <div class="field">
-                                            <label>{{ __('lang.duration') }} <span class="text-danger">*</span> </label>
-                                            <div class="ui right labeled input">
-                                                <input type="number" min="0" name="course_duration" placeholder="{{ __('lang.duration') }}" value="@if ($update){{ $course->course_duration }}@else{{ old('course_duration') }}@endif">
-                                                <div class="ui label">
-                                                    {{ __('lang.hours') }}
+                                        <div class="two fields">
+                                            <div class="field">
+                                                <label>{{ __('lang.duration') }} <span class="text-danger">*</span> </label>
+                                                <div class="ui right labeled input">
+                                                    <input type="number" min="0" name="course_duration" placeholder="{{ __('lang.duration') }}" value="@if ($update){{ $course->course_duration }}@else{{ old('course_duration') }}@endif">
+                                                    <div class="ui label">
+                                                        {{ __('lang.hours') }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

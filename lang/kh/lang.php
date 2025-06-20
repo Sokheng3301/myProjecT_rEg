@@ -282,6 +282,7 @@ return[
     'updateTeacher' => 'កែប្រែគ្រូបង្រៀន',
     'choseProfileToUpload' => 'ជ្រើសរើសរូបថតដើម្បីបញ្ចូល',
     'idCard' => 'អត្តលេខ',
+    
     'username' => 'ឈ្មោះប្រើប្រាស់',
     'password' => 'ពាក្យសម្ងាត់',
     'confirmPassword' => 'ផ្ទៀតផ្ទាត់លេខសម្ងាត់',
@@ -609,4 +610,7 @@ return[
     'courseCodeExists' => 'លេខកូដវគ្គសិក្សានេះមានរួចហើយ',
     'updateCourseSuccess' => 'កែប្រែវគ្គសិក្សាបានជោគជ័យ',
     'updateCourseError' => 'កែប្រែវគ្គសិក្សាបានបរាជ័យ',
+    'deletecourseSuccess' => 'លុបវគ្គសិក្សាបានជោគជ័យ',
+    'restorecourseSuccess' => 'ស្តាទិន្នន័យវគ្គសិក្សាបានជោគជ័យ',
+    'deletecourseError' => 'លុបវគ្គសិក្សាបានបរាជ័យ',
 ];

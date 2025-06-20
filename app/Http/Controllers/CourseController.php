@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Helpers\AppHelper;
 use App\Models\Course;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Http\Helpers\AppHelper;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
@@ -146,6 +147,20 @@ class CourseController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $course = Course::findOrFail($id);
+
+        if ($course) {
+            if($course->delete_status == 1){
+                // Delete
+                $course->update(['delete_status' => 0, 'deleted_at' => now(), 'deleted_by' => @Auth::user()->name]);
+                return response()->json(['success' => __('lang.deletecourseSuccess')], 200);
+            }else{
+                // Restore
+                $course->update(['delete_status' => 1]);
+                return response()->json(['success' => __('lang.restorecourseSuccess')], 200);
+            }
+        } else {
+            return response()->json(['error' => __('lang.deletecourseError')], 404);
+        }
     }
 }

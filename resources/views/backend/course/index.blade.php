@@ -115,19 +115,19 @@
                                                     $i = 1;
                                             @endphp
                                             @foreach ($courses as $course)
-                                                <tr class="{{ $course->delete_status == 0 ? 'text-danger' : ''}}">
-                                                    <td scope="row" class="text-start"><span class="m-auto mt-3 d-block">{{ $i++ }}</span></td>
-                                                    <td class="text">
-                                                        <p class="text-primary fw-bold"><span class="text-black fw-normal">{{ __("lang.code")  }} : </span> {{ $course->course_code}}</p>
+                                                <tr class="{{ $course->delete_status == 0 ? 'bg-danger' : ''}}">
+                                                    <td scope="row" class="text-start {{ $course->delete_status == 0 ? 'text-danger' : ''}}"><span class="m-auto mt-3 d-block">{{ $i++ }}</span></td>
+                                                    <td class="text {{ $course->delete_status == 0 ? 'text-danger' : ''}}">
+                                                        <p class="text-primary fw-bold {{ $course->delete_status == 0 ? 'text-danger' : ''}}"><span class="fw-normal {{ $course->delete_status == 0 ? 'text-danger' : 'text-black'}}">{{ __("lang.code")  }} : </span> {{ $course->course_code}}</p>
                                                         <p class="fw-bold">
                                                             {{-- @if(session()->has('localization') && session('localization') == 'en') --}}
-                                                                <span class="text-black fw-normal">{{ __("lang.course")  }} : </span> {{  $course->course_name_kh . ' - '. $course->course_name_en }}
+                                                            <span class="{{ $course->delete_status == 0 ? 'text-danger' : 'text-black'}} fw-normal">{{ __("lang.course")  }} : </span> {{  $course->course_name_kh . ' - '. $course->course_name_en }}
                                                         </p>
                                                         <p class="fw-bold">
-                                                            <span class="text-black fw-normal">{{ __("lang.credit")  }} : </span> {{ $course->course_credit .' ('. $course->course_theory . '.'. $course->course_execute. '.'. $course->course_apply . ')' }}
+                                                            <span class="{{ $course->delete_status == 0 ? 'text-danger' : 'text-black'}} fw-normal">{{ __("lang.credit")  }} : </span> {{ $course->course_credit .' ('. $course->course_theory . '.'. $course->course_execute. '.'. $course->course_apply . ')' }}
                                                         </p>
                                                         <p class="fw-bold">
-                                                            <span class="text-black fw-normal">{{ __("lang.department")  }} : </span>
+                                                            <span class="{{ $course->delete_status == 0 ? 'text-danger' : 'text-black'}} fw-normal">{{ __("lang.department")  }} : </span>
                                                             @if(session()->has('localization') && session('localization') == 'en')
                                                                 {{ $course->department->dep_name_en }}
                                                             @else
@@ -135,21 +135,21 @@
                                                             @endif
                                                         </p>
                                                         <p class="fw-bold">
-                                                            <span class="text-black fw-normal">{{ __("lang.duration")  }} : </span> {{ $course->course_duration . ' ' . __('lang.hours') }}
+                                                            <span class="{{ $course->delete_status == 0 ? 'text-danger' : 'text-black'}} fw-normal">{{ __("lang.duration")  }} : </span> {{ $course->course_duration . ' ' . __('lang.hours') }}
                                                         </p>
-                                                        <p class="text-muted mt-2">
+                                                        <p class="mt-2 {{ $course->delete_status == 0 ? 'text-muted' : 'text-muted'}}">
                                                            {{ \App\Http\Helpers\AppHelper::courseType($course->course_type) }}
                                                         </p>
                                                     </td>
 
-                                                    <td>
+                                                    <td class="{{ $course->delete_status == 0 ? 'text-danger' : ''}}">
                                                         {{ Carbon::parse($course->created_at)->format('d-m-Y H:m:i a') }}
                                                     </td>
-                                                    <td>
+                                                    <td class="{{ $course->delete_status == 0 ? 'text-danger' : ''}}">
                                                             {{ $course->deleted_at ? Carbon::parse($course->deleted_at)->format('d-m-Y') : ''}}
                                                     </td>
-                                                    <td>
-                                                        {{ $course->deleted_by ? $course->delete_by : '' }}
+                                                    <td class="{{ $course->delete_status == 0 ? 'text-danger' : ''}}">
+                                                        {{ $course->deleted_by ? $course->deleted_by : '' }}
                                                     </td>
                                                     <td>
                                                         {{-- <a data-bs-toggle="modal" data-bs-target="#courseDetail" type="button" data-id="{{ $course->id }}" title="Detail" class="me-2"><i class="bi bi-eye-fill"></i></a> --}}
@@ -184,7 +184,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal Course Detail -->
     <div class="modal fade" id="courseDetail" tabindex="-1" aria-labelledby="courseDetail" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
@@ -261,7 +261,7 @@
 
             $(document).on('click', '#delete_button', function() {
                 var id = $(this).val();
-                var url = "{{ route('department.destroy', ':id') }}".replace(':id', id);
+                var url = "{{ route('course.destroy', ':id') }}".replace(':id', id);
 
                 Swal.fire({
                     title: '{{ __("lang.areYouSure") }}',
@@ -330,7 +330,7 @@
 
             $(document).on('click', '#restore_button', function() {
                 var id = $(this).val();
-                var url = "{{ route('department.destroy', ':id') }}".replace(':id', id);
+                var url = "{{ route('course.destroy', ':id') }}".replace(':id', id);
 
                 Swal.fire({
                     title: '{{ __("lang.areYouSure") }}',
