@@ -65,6 +65,14 @@ class StudentController extends Controller
         $data['class_id'] = $request->class_id ?? '';
         $data['year'] = $request->academy_year ?? '';
 
+
+        if($data['students'] != null){
+            $class_id = $data['students']->first();
+            $data['class_id'] = $class_id->class_id;
+        }else{
+            $data['class_id'] = 0;
+        }
+
         return view('backend.student.index', $data);
     }
 
@@ -213,6 +221,8 @@ class StudentController extends Controller
         $data['search'] = null;
         $data['class_id'] = null;
         $data['class'] = null;
+        $data['queryString'] = null;
+
         $data['years'] = Year::orderBy('id', 'desc')->get();
         $data['classes'] = Studentclass::with('majors', 'departments')->where('delete_status', 1)->orderBy('id', 'desc')->get();
         $data['departments'] = Department::where('delete_status', 1)->orderBy('id', 'desc')->get();
@@ -359,6 +369,14 @@ class StudentController extends Controller
      */
     public function edit(string $id)
     {
+        $getUrl = url()->previous();
+        $queryString = parse_url($getUrl, PHP_URL_QUERY);
+        $data['queryString'] = $queryString;
+
+
+    // Parse the query string into an associative array
+
+
         $data['update'] = true;
         $data['student'] = Student::with('class')->findOrFail($id);
         $data['years'] = Year::orderBy('id', 'desc')->get();
@@ -393,6 +411,8 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $queryString = $request->queryString;
+
         $studentRun = false;
         $studyHistoryRun = false;
         $siblingRun = false;
@@ -543,7 +563,7 @@ class StudentController extends Controller
 
 
         if($updateStudent && $studentRun && $studyHistoryRun && $siblingRun == true){
-            return redirect()->route('student.index')->with('success', __("lang.updateStudentSuccess"));
+            return redirect()->route('student.index', $queryString)->with('success', __("lang.updateStudentSuccess"));
         }else{
             return redirect()->back()->with('error', __("lang.updateStudentError"))->withInput();
         }

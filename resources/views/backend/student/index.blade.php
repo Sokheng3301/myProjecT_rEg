@@ -175,7 +175,7 @@
                                     <div class="ui small icon buttons">
                                         {{-- <button class="ui button"><i class="file icon"></i></button> --}}
                                         <button class="ui button fw-normal" title="{{__('lang.print')}}"><i class="bi bi-printer"></i> {{__('lang.print')}}</button>
-                                        <a href="{{ route('pdf.student') }}" class="ui red button fw-normal" title="{{ __('lang.exportAsPDF') }}"><i class="bi bi-file-pdf"></i> PDF</a>
+                                        <a href="{{ route('pdf.student', @$class_id) }}" class="ui red button fw-normal" title="{{ __('lang.exportAsPDF') }}"><i class="bi bi-file-pdf"></i> PDF</a>
                                         <button class="ui teal button fw-normal" title="{{ __("lang.exportAsExcel") }}"><i class="bi bi-file-earmark-spreadsheet"></i> Excel</button>
                                     </div>
                                     {{-- <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
@@ -202,7 +202,7 @@
                                                     <th scope="col">{{__('lang.nameEn')}}</th>
                                                     <th scope="col">{{__('lang.gender')}}</th>
                                                     <th scope="col">{{__('lang.birthDate')}}</th>
-                                                    <th scope="col">{{__('lang.phone')}}</th>
+                                                    <th scope="col" class="text-start">{{__('lang.phone')}}</th>
                                                     <th scope="col" colspan="2" class="text-center">{{__('lang.accountStatus')}}</th>
 
                                                     {{-- <th scope="col" class="text-center">{{__('lang.action')}}</th> --}}
@@ -219,8 +219,8 @@
                                                     <td><img class="ui mini image" src="{{ asset($student->profile ? $student->profile : 'dist/assets/img/white-image.png') }}" alt=""></td>
                                                     <td class="text-start {{ $student->delete_status == 0 ? 'text-danger' : '' }}">{{$student->id_card}}</td>
                                                     <td class="{{ $student->delete_status == 0 ? 'text-danger' : '' }}">{{$student->fullname_kh}}</td>
-                                                    <td class="{{ $student->delete_status == 0 ? 'text-danger' : '' }}">{{$student->fullname_en}}</td>
-                                                    <td class="{{ $student->delete_status == 0 ? 'text-danger' : '' }}">
+                                                    <td class="{{ $student->delete_status == 0 ? 'text-danger' : '' }} text-uppercase">{{$student->fullname_en}}</td>
+                                                    <td class="{{ $student->delete_status == 0 ? 'text-danger' : '' }}" title="@if($student->gender != ''){{ $student->gender == 'm'?__("lang.male"):__('lang.female')}}@endif">
                                                         @if ($student->gender == 'm')
                                                             <i class="bi bi-gender-male" style="color: #0464ff;"></i>
                                                         @elseif($student->gender == 'f')

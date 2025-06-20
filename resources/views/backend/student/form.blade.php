@@ -100,6 +100,7 @@
                                     <div class="row bg-light py-3 ">
                                         {{-- add here  --}}
                                         <div class="col-md-6">
+                                            <input type="hidden" class="d-none" name="queryString" value="{{ $queryString ?? '' }}">
 
                                             <div class="field">
                                                 <label>{{ __('lang.academyYear') }} <span

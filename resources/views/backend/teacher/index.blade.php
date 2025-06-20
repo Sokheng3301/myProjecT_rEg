@@ -109,8 +109,8 @@
                                             <th scope="col">{{__('lang.birthDate')}}</th>
                                             <th scope="col">{{__('lang.department')}}</th>
                                             <th scope="col">{{__('lang.phoneNumber')}}</th>
-                                            <th scope="col">{{__('lang.accountStatus')}}</th>
-                                            <th scope="col" class="text-center">{{__('lang.action')}}</th>
+                                            <th scope="col" colspan="2" class="text-center">{{__('lang.accountStatus')}}</th>
+                                            {{-- <th scope="col" class="text-center">{{__('lang.action')}}</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -132,21 +132,21 @@
                                                     <img class="ui mini circular image" src="{{ asset($t->profile ?: 'dist/assets/img/white-image.png') }}" alt="profile">
                                                 </td>
 
-                                                <td @if ($t->delete_status	 == 0)
+                                                <td @if ($t->delete_status == 0)
                                                         class="text-danger"
                                                     @endif> {{ $t->id_card }}
                                                 </td>
-                                                <td @if ($t->delete_status	 == 0)
+                                                <td @if ($t->delete_status == 0)
                                                         class="text-danger"
                                                     @endif> {{ $t->fullname_kh }}
                                                 </td>
-                                                <td @if ($t->delete_status	 == 0)
-                                                        class="text-danger"
-                                                    @endif> {{ $t->fullname_en }}
+                                                <td class="@if($t->delete_status == 0)
+                                                        text-danger
+                                                    @endif text-uppercase"> {{ $t->fullname_en }}
                                                 </td>
                                                 <td @if ($t->delete_status	 == 0)
                                                         class="text-danger"
-                                                    @endif>
+                                                    @endif title="@if($t->gender != ''){{ $t->gender == 'm'?__("lang.male"):__('lang.female')}}@endif">
                                                     @if ($t->gender == 'm')
                                                         <i class="bi bi-gender-male" style="color: #0464ff;"></i>
                                                     @else
@@ -171,15 +171,15 @@
                                                     @endif> {{ $t->phone_number }}
                                                 </td>
 
-                                                <td @if ($t->delete_status	 == 0)
-                                                        class="text-danger"
-                                                    @endif> <small class="{{ $t->block_status == 1 ? 'ui green label' : 'ui red label' }}"> {{ $t->block_status == 1 ?  __('lang.none') : __('lang.blocked')}} </small>
+                                                <td class="@if ($t->delete_status	 == 0)
+                                                        text-danger
+                                                    @endif text-end"> <small class="{{ $t->block_status == 1 ? 'ui green label' : 'ui red label' }}"> {{ $t->block_status == 1 ?  __('lang.active') : __('lang.blocked')}} </small>
                                                 </td>
 
                                                 <td class="text-center">
                                                     <div class="ui">
                                                         <div class="ui floating dropdown dropdown{{ $incre++ }} icon">
-                                                            <i class="bi bi-gear"></i>
+                                                            <i class="bi bi-three-dots-vertical"></i>
                                                             <div class="menu">
                                                                 <a title="About" href="{{ route('teacher.show', $t->id) }}" class="item"><i class="bi bi-eye-fill"></i> {{ __('lang.aboutTeacher') }}</a>
                                                                 <a title="Update" href="{{ route('teacher.edit', $t->id) }}" class="item"><i class="bi bi-pencil-square"></i> {{ __("lang.update") }}</a>

@@ -151,9 +151,9 @@
                         </li>
 
                         <li class="nav-item">
-                        <a href="./layout/layout-rtl.html" class="nav-link">
+                        <a href="{{ route('qrcode.index') }}" class="nav-link">
                             <i class="nav-icon bi bi-circle"></i>
-                            <p> {{ __('lang.generateQrcode') }} </p>
+                            <p> {{ __('lang.qrCode') }} </p>
                         </a>
                         </li>
                     </ul>

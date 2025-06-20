@@ -51,6 +51,13 @@ class StudentdropoutController extends Controller
         $data['class_id'] = $request->class_id ?? '';
         $data['year'] = $request->academy_year ?? '';
 
+        // if($data['students'] != null){
+        //     $data['class_id'] = $data['students']->first();
+        // }else{
+        //     $data['class_id'] = 0;
+        // }
+
+
         return view('backend.student.dropout', $data);
     }
 }

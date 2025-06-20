@@ -47,6 +47,7 @@ class Student extends Model
         'sibling',
         'female_sibling',
         'note',
+        'qrcode',
         'block_status',
         'blocked_date',
         'blocked_by',

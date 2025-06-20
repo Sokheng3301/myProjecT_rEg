@@ -282,13 +282,13 @@ return[
     'updateTeacher' => 'កែប្រែគ្រូបង្រៀន',
     'choseProfileToUpload' => 'ជ្រើសរើសរូបថតដើម្បីបញ្ចូល',
     'idCard' => 'អត្តលេខ',
-    
+
     'username' => 'ឈ្មោះប្រើប្រាស់',
     'password' => 'ពាក្យសម្ងាត់',
     'confirmPassword' => 'ផ្ទៀតផ្ទាត់លេខសម្ងាត់',
     'requiredInfomation' => 'ព័ត៌មានដែលចាំបាច់',
     'fullnameKh' => 'គោត្តនាម និងនាម',
-    'fullnameEn' => 'ឈ្មោះជាអក្សរឡាតាំង',
+    'fullnameEn' => 'អក្សរឡាតាំង',
     'gender' => 'ភេទ',
     'selectGender' => 'ជ្រើសរើសភេទ',
     'female' => 'ស្រី',
@@ -613,4 +613,10 @@ return[
     'deletecourseSuccess' => 'លុបវគ្គសិក្សាបានជោគជ័យ',
     'restorecourseSuccess' => 'ស្តាទិន្នន័យវគ្គសិក្សាបានជោគជ័យ',
     'deletecourseError' => 'លុបវគ្គសិក្សាបានបរាជ័យ',
+    'totalStudent' => 'និស្សិតសរុប',
+    'femaleStudent' => 'និស្សិតស្រី',
+    'qrCode' => 'កូដ QR',
+    'readQrcode' => 'អានកូដ QR',
+    'generate' => 'បង្កើត',
+    
 ];

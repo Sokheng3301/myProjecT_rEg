@@ -175,7 +175,7 @@
                                     <div class="ui small icon buttons">
                                         {{-- <button class="ui button"><i class="file icon"></i></button> --}}
                                         <button class="ui button fw-normal" title="{{__('lang.print')}}"><i class="bi bi-printer"></i> {{__('lang.print')}}</button>
-                                        <a href="{{ route('pdf.student') }}" class="ui red button fw-normal" title="{{ __('lang.exportAsPDF') }}"><i class="bi bi-file-pdf"></i> PDF</a>
+                                        <a href="{{ route('pdf.student', @$class_id) }}" class="ui red button fw-normal" title="{{ __('lang.exportAsPDF') }}"><i class="bi bi-file-pdf"></i> PDF</a>
                                         <button class="ui teal button fw-normal" title="{{ __("lang.exportAsExcel") }}"><i class="bi bi-file-earmark-spreadsheet"></i> Excel</button>
                                     </div>
                                     {{-- <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">

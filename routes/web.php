@@ -14,6 +14,7 @@ use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\ClassrommController;
 use App\Http\Controllers\ExportPDFController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\StudentdropoutController;
 use App\Http\Controllers\SetlocalizationController;
 
@@ -98,13 +99,14 @@ Route::middleware(['auth', 'lang', 'auto.app'])->group(function () {
         Route::post('student/reset-pass', [StudentController::class, 'resetPass'])->name('student.resetPass');
         Route::post('student/leave/{id}', [StudentController::class, 'leave'])->name('student.leave');
         Route::resource('student-dropout', StudentdropoutController::class)->only('index');
-
         // PDF route
-        Route::get('student/list/export/pdf', [ExportPDFController::class, 'exportPdf'])->name('pdf.student');
+        Route::get('student/list/export/pdf/{class_id}', [ExportPDFController::class, 'exportPdf'])->name('pdf.student');
 
 
         //course route
         Route::resource('course', CourseController::class);
+        //Qr Code route
+        Route::resource('qrcode', QRCodeController::class);
 });
 
 
