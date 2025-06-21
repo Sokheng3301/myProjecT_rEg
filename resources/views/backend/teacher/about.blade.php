@@ -51,7 +51,7 @@
                                         <div class="row">
                                             <div class="col-md-6 mx-auto">
                                                 {{-- <label for="teacher_profile" class="file-upload"> --}}
-                                                    <img class="ui small image mx-auto" @if ($teacher->profile)
+                                                    <img class="ui small image mx-auto bordered" @if ($teacher->profile)
                                                         src="{{ asset($teacher->profile) }}"
                                                         @else
                                                         src="{{ asset('dist/assets/img/white-image.png') }}"

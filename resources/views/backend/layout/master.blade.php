@@ -93,7 +93,7 @@
         font-size: x-large !important;
       } */
         #myTable thead th:first-child {
-            width: 5% !important;
+            /* width: 5% !important; */
         }
 
         .language {
@@ -605,7 +605,7 @@
                 "order": [[1, 'asc']],
                 // "columnDefs": [
                 //     { orderable: false, targets: [] }
-                // ]            
+                // ]
 
             });
 

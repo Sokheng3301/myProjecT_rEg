@@ -20,4 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Route::get('ksit/qrcode/'.$hasUrl.'{id}', [ApiQRcodeController::class, 'index'])->name('api.generateqr');
-Route::get('ksit/qrcode/{id}', [ApiQRcodeController::class, 'index'])->name('api.generateqr');
+// Route::get('ksit/qrcode/{id}', [ApiQRcodeController::class, 'index'])->name('api.generateqr');

@@ -247,7 +247,7 @@
                                                         <div class="ui d-flex">
                                                             <div class="ui floating dropdown dropdown{{ $incre++ }} icon">
                                                                 {{-- <button class="circular ui icon button"></button> --}}
-                                                                <i class="bi bi-three-dots-vertical"></i>
+                                                                <i class="bi bi-three-dots-vertical text-muted"></i>
                                                                 <div class="menu">
                                                                     <a title="About" href="{{ route('student.show', $student->id) }}" class="item"><i class="bi bi-eye-fill"></i> {{ __('lang.aboutStudent') }}</a>
                                                                     <a title="Update" href="{{ route('student.edit', $student->id) }}" class="item"><i class="bi bi-pencil-square"></i> {{ __("lang.update") }}</a>
@@ -853,22 +853,19 @@
                     },
                     dataType: "json",
                     success:function(data){
-                            $('#class_detail').removeClass('" d-none "');
+                        $('#class_detail').removeClass('" d-none "');
+                        $('#classCodeValue').text(data.class_code);
+                        $('#departmentValue').text(data.department);
+                        $('#majorValue').text(data.major);
+                        $('#studyLevelValue').text(data.level_study);
+                        $('#yearLevelValue').text(data.level_year);
+                        $('#academyYearValue').text(data.academy_year);
 
-
-                            $('#classCodeValue').text(data.class_code);
-                            $('#departmentValue').text(data.department);
-                            $('#majorValue').text(data.major);
-                            $('#studyLevelValue').text(data.level_study);
-                            $('#yearLevelValue').text(data.level_year);
-                            $('#academyYearValue').text(data.academy_year);
-
-                            $('#graduatedValue').text(data.graduate_status);
-                            $('#createdAtValue').text(data.created_at);
-                            $('#deletedAtValue').text(data.deleted_at);
-                            $('#deletedByValue').text(data.deleted_by);
-
-                        }
+                        $('#graduatedValue').text(data.graduate_status);
+                        $('#createdAtValue').text(data.created_at);
+                        $('#deletedAtValue').text(data.deleted_at);
+                        $('#deletedByValue').text(data.deleted_by);
+                    }
                 });
             });
         });

@@ -53,7 +53,7 @@
             </div>
         </div>
     </div> --}}
-    
+
     @section('pageTitle')
         {{__('lang.department')}}
     @endsection
@@ -64,7 +64,7 @@
             <div class="row">
             <!-- Start col -->
                 <div class="col-lg-12 connectedSortable">
-                    
+
                 <!-- /.card -->
                 <!-- DIRECT CHAT -->
                     <div class="card mb-4">
@@ -97,76 +97,78 @@
                                     <div class="dot"></div>
                                     <div class="dot"></div>
                                 </div>
-                               <table class="table" id="myTable">
-                                <thead>
-                                    <tr>
-                                    <th scope="col">{{__('lang.no')}}</th>
-                                    <th scope="col">{{__('lang.logo')}}</th>
-                                    <th scope="col">{{__('lang.code')}}</th>
-                                    <th scope="col">{{__('lang.department')}}</th>
-                                    <th scope="col">{{__('lang.departmentEN')}}</th>
-                                    <th scope="col">{{__('lang.createdAt')}}</th>
-                                    <th scope="col">{{__('lang.deletedAt')}}</th>
-                                    <th scope="col">{{__('lang.deletedBy')}}</th>
-                                    <th scope="col">{{__('lang.action')}}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                            $i = 1;
-                                    @endphp
-                                    @foreach ($departments as $department)
-                                        <tr @if ($department->delete_status	 == 0)
-                                            class="text-danger"
-                                        @endif>
-                                            
-                                            <td @if ($department->delete_status	 == 0)
-                                            class="text-danger"
-                                        @endif scope="row">{{$i++}}</td>
-                                            <td @if ($department->delete_status	 == 0)
-                                            class="text-danger"
-                                        @endif><img class="ui mini image" src="{{ asset($department->dep_logo) }}" alt=""></td>
-                                            <td @if ($department->delete_status	 == 0)
-                                            class="text-danger"
-                                        @endif> {{ $department->dep_code }} </td>
-                                            <td @if ($department->delete_status	 == 0)
-                                            class="text-danger"
-                                        @endif> {{ $department->dep_name_kh }} </td>
-                                            <td @if ($department->delete_status	 == 0)
-                                            class="text-danger"
-                                        @endif> {{ $department->dep_name_en }} </td>
-                                            <td @if ($department->delete_status	 == 0)
-                                            class="text-danger"
-                                        @endif> {{ Carbon::parse($department->created_at)->format('d-m-Y h:i:s a') }} </td>
-                                            <td @if ($department->delete_status	 == 0)
-                                            class="text-danger"
-                                        @endif> {{ $department->deleted_at }} </td>
-                                            <td @if ($department->delete_status	 == 0)
-                                            class="text-danger"
-                                        @endif> {{ $department->deleted_by }} </td>
-                                            <td>
-                                                <a href="{{ route('department.edit', $department->id) }}" title="Edit" class="me-2"> <i class="bi bi-pencil-fill"></i></a>
-                                                <button type="button" class="border-0 bg-transparent" style="outline: 0;" value="{{ $department->id }}" 
-                                                    @if($department->delete_status == 1)
-                                                        id="delete_button"
-                                                    @else
-                                                        id="restore_button"
-                                                    @endif
-                                                    title=" @if ($department->delete_status == 1)
-                                                    Delete
-                                                @else
-                                                    Restore
-                                                @endif "> <i class="bi @if ($department->delete_status == 1)
-                                                    bi-trash text-danger
-                                                    @else
-                                                    bi-arrow-clockwise text-success 
-                                                @endif "></i> </button>
-                                                {{-- <a href="" title="Restore"> <i class="bi "></i> </a> --}}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                                </table>
+                                <div class="myresponsive_table">
+                                    <table class="table" id="myTable">
+                                        <thead>
+                                            <tr>
+                                            <th scope="col">{{__('lang.no')}}</th>
+                                            <th scope="col">{{__('lang.logo')}}</th>
+                                            <th scope="col">{{__('lang.code')}}</th>
+                                            <th scope="col">{{__('lang.department')}}</th>
+                                            <th scope="col">{{__('lang.departmentEN')}}</th>
+                                            <th scope="col">{{__('lang.createdAt')}}</th>
+                                            <th scope="col">{{__('lang.deletedAt')}}</th>
+                                            <th scope="col">{{__('lang.deletedBy')}}</th>
+                                            <th scope="col">{{__('lang.action')}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                    $i = 1;
+                                            @endphp
+                                            @foreach ($departments as $department)
+                                                <tr @if ($department->delete_status	 == 0)
+                                                    class="text-danger"
+                                                @endif>
+
+                                                    <td @if ($department->delete_status	 == 0)
+                                                    class="text-danger"
+                                                @endif scope="row">{{$i++}}</td>
+                                                    <td @if ($department->delete_status	 == 0)
+                                                    class="text-danger"
+                                                @endif><img class="ui mini image" src="{{ asset($department->dep_logo) }}" alt=""></td>
+                                                    <td @if ($department->delete_status	 == 0)
+                                                    class="text-danger"
+                                                @endif> {{ $department->dep_code }} </td>
+                                                    <td @if ($department->delete_status	 == 0)
+                                                    class="text-danger"
+                                                @endif> {{ $department->dep_name_kh }} </td>
+                                                    <td @if ($department->delete_status	 == 0)
+                                                    class="text-danger"
+                                                @endif> {{ $department->dep_name_en }} </td>
+                                                    <td @if ($department->delete_status	 == 0)
+                                                    class="text-danger"
+                                                @endif> {{ Carbon::parse($department->created_at)->format('d-m-Y h:i:s a') }} </td>
+                                                    <td @if ($department->delete_status	 == 0)
+                                                    class="text-danger"
+                                                @endif> {{ $department->deleted_at }} </td>
+                                                    <td @if ($department->delete_status	 == 0)
+                                                    class="text-danger"
+                                                @endif> {{ $department->deleted_by }} </td>
+                                                    <td>
+                                                        <a href="{{ route('department.edit', $department->id) }}" title="Edit" class="me-2"> <i class="bi bi-pencil-fill"></i></a>
+                                                        <button type="button" class="border-0 bg-transparent" style="outline: 0;" value="{{ $department->id }}"
+                                                            @if($department->delete_status == 1)
+                                                                id="delete_button"
+                                                            @else
+                                                                id="restore_button"
+                                                            @endif
+                                                            title=" @if ($department->delete_status == 1)
+                                                            Delete
+                                                        @else
+                                                            Restore
+                                                        @endif "> <i class="bi @if ($department->delete_status == 1)
+                                                            bi-trash text-danger
+                                                            @else
+                                                            bi-arrow-clockwise text-success
+                                                        @endif "></i> </button>
+                                                        {{-- <a href="" title="Restore"> <i class="bi "></i> </a> --}}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -221,7 +223,7 @@
 
                                 setTimeout(() => {
                                     location.reload();
-                                    
+
                                 }, 1200);
                             },
 
@@ -290,7 +292,7 @@
 
                                 setTimeout(() => {
                                     location.reload();
-                                    
+
                                 }, 1200);
                             },
 

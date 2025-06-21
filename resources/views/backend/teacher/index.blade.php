@@ -179,7 +179,7 @@
                                                 <td class="text-center">
                                                     <div class="ui">
                                                         <div class="ui floating dropdown dropdown{{ $incre++ }} icon">
-                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                            <i class="bi bi-three-dots-vertical text-muted"></i>
                                                             <div class="menu">
                                                                 <a title="About" href="{{ route('teacher.show', $t->id) }}" class="item"><i class="bi bi-eye-fill"></i> {{ __('lang.aboutTeacher') }}</a>
                                                                 <a title="Update" href="{{ route('teacher.edit', $t->id) }}" class="item"><i class="bi bi-pencil-square"></i> {{ __("lang.update") }}</a>

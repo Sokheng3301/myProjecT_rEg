@@ -9,8 +9,7 @@ use App\Models\Department;
 use App\Models\Studentclass;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-
-// use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Factory\QrCodeFactory;
 use Endroid\QrCode\Response\QrCodeResponse;
 
 use function PHPUnit\Framework\returnSelf;
@@ -105,7 +104,8 @@ class QRCodeController extends Controller
     public function download(string $id){
         $student = Student::findOrFail($id);
         // dd($student);
-        $text = ''; // Get the text from the student object
+        $text = 'http://192.168.10.192:3301/api/ksit/qrcode/7'; // Get the text from the student object
+
 
         // Generate QR code
         $qrCode = QrCode::size(300)
@@ -115,7 +115,8 @@ class QRCodeController extends Controller
 
         // Create a response to download the image
         return response($qrCode)
-            ->header('Content-Type', 'image/png')
-            ->header('Content-Disposition', 'attachment; filename="qrcode.png"');
+            ->header('Content-Type', 'image/jpg')
+            ->header('Content-Disposition', 'attachment; filename="qrcode.jpg"');
+
     }
 }

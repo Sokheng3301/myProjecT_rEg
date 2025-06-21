@@ -1,5 +1,5 @@
 @php
-    
+
 @endphp
 @extends('backend.layout.master')
 @section('title')
@@ -20,7 +20,7 @@
             </div>
         </div>
     </div> --}}
-    
+
     @section('pageTitle')
         @if ($update)
             {{__('lang.updateSemester')}}
@@ -35,7 +35,7 @@
             <div class="row">
             <!-- Start col -->
                 <div class="col-md-8 connectedSortable">
-                    
+
                 <!-- /.card -->
                 <!-- DIRECT CHAT -->
                     <div class="card mb-4">
@@ -83,7 +83,7 @@
                                 <!-- Conversations are loaded here -->
                                 <div class="row">
                                     {{-- <div class="col-md-6">
-                                        
+
                                     </div> --}}
                                     <div class="col-md-12 mx-auto">
                                         <div class="field">
@@ -95,27 +95,33 @@
                                                {{ __('lang.classCodeMessage') }}
                                             </div>
                                         @enderror --}}
-                                        
+
                                         <div class="field">
                                             <label>{{ __('lang.startDate') }}</label>
-                                            <input type="text" name="start_date" id="datepicker" placeholder="{{ __('lang.startDate') }}" value="@if ($update){{ \Illuminate\Support\Carbon::parse($semester->start_date)->format('m/d/Y') }}@else{{ old('start_date') }}@endif">
+                                            <div class="ui input icon">
+                                                <input type="text" name="start_date" id="datepicker" placeholder="{{ __('lang.startDate') }}" value="@if ($update){{ \Illuminate\Support\Carbon::parse($semester->start_date)->format('m/d/Y') }}@else{{ old('start_date') }}@endif">
+                                                <i class="bi bi-calendar3 icon"></i>
+                                            </div>
                                         </div>
 
                                         <div class="field">
                                             <label>{{ __('lang.finishDate') }}</label>
-                                            <input type="text" name="finish_date" id="datepicker1" placeholder="{{ __('lang.finishDate') }}" value="@if ($update){{ \Illuminate\Support\Carbon::parse($semester->finish_date)->format('m/d/Y') }}@else{{ old('finish_date') }}@endif">
+                                            <div class="ui input icon">
+                                                <input type="text" name="finish_date" id="datepicker1" placeholder="{{ __('lang.finishDate') }}" value="@if ($update){{ \Illuminate\Support\Carbon::parse($semester->finish_date)->format('m/d/Y') }}@else{{ old('finish_date') }}@endif">
+                                                <i class="bi bi-calendar3 icon"></i>
+                                            </div>
                                         </div>
 
 
 
-                                       
+
 
                                         {{-- <div class="field">
                                             <label>{{__('lang.yearLevel')}}</label>
                                             <select class="ui search dropdown2" name="year_level">
                                                 <option value="">{{__('lang.selectYearLevel')}}</option>
                                                 @foreach (App\Http\Helpers\AppHelper::getYearLevel() as $key => $year_level)
-                                                    <option value="{{ $key }}" 
+                                                    <option value="{{ $key }}"
                                                         @if($update)
                                                             @if ($key == $semester->year_level)
                                                                 selected
@@ -137,7 +143,7 @@
                                             <select class="ui search dropdown3" name="academy_year">
                                                 <option value="">{{__('lang.selectacademyYear')}}</option>
                                                 @foreach ($years as $y)
-                                                    <option value="{{ $y->year }}" 
+                                                    <option value="{{ $y->year }}"
                                                         @if($update)
                                                             @if ($y->year == $semester->academy_year)
                                                                 selected
@@ -149,7 +155,7 @@
                                                         @endif
                                                     >
                                                         {{ $y->year }}
-                                                        
+
                                                     </option>
                                                 @endforeach
                                             </select>

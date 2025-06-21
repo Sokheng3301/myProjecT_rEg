@@ -7,14 +7,15 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MajorController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SemesterController;
+use App\Http\Controllers\ApiQRcodeController;
 use App\Http\Controllers\ClassrommController;
 use App\Http\Controllers\ExportPDFController;
 use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\StudentdropoutController;
 use App\Http\Controllers\SetlocalizationController;
 
@@ -32,6 +33,11 @@ Route::middleware(['lang', 'auto.app'])->group(function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');
     Route::post('login/save', [LoginController::class, 'save'])->name('login.save');
 });
+
+Route::middleware(['lang', 'auto.app'])->group(function(){
+    Route::get('ksit/qrcode/', [ApiQRcodeController::class, 'index'])->name('api.generateqr');
+});
+
 
 Route::middleware(['auth', 'lang', 'auto.app'])->group(function () {
 
